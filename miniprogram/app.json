@@ -1,0 +1,51 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/filter/filter",
+    "pages/detail/detail",
+    "pages/edit/edit",
+    "pages/me/me",
+    "pages/favorites/favorites",
+    "pages/requests/requests",
+    "pages/messages/messages",
+    "pages/chat/chat",
+    "pages/report/report",
+    "pages/admin/admin"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#c63d2f",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "新化相亲"
+  },
+  "tabBar": {
+    "color": "#64748b",
+    "selectedColor": "#c63d2f",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/favorites/favorites",
+        "text": "收藏"
+      },
+      {
+        "pagePath": "pages/requests/requests",
+        "text": "申请"
+      },
+      {
+        "pagePath": "pages/messages/messages",
+        "text": "消息"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

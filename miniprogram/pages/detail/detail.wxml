@@ -1,0 +1,134 @@
+<view class="page detail-page safe-bottom">
+  <block wx:if="{{profile}}">
+    <view class="section card detail-header">
+      <view class="row-start gap-20">
+        <view class="avatar avatar-lg" style="background-color: {{profile.avatarColor}};">
+          <image wx:if="{{profile.avatarUrl}}" class="avatar-img" src="{{profile.avatarUrl}}" mode="aspectFill" />
+          <text wx:else>{{profile.avatarText}}</text>
+        </view>
+        <view class="detail-main">
+          <view class="profile-name">{{profile.nickname}}</view>
+          <view class="subtle">{{profile.gender}} · {{profile.age}}岁 · {{profile.currentCity}}</view>
+          <view class="tag-row">
+            <text class="tag tag-mode">{{profile.publisherText}}</text>
+            <text class="tag tag-mode">{{profile.contactChannelText}}</text>
+            <text class="tag tag-soft">{{profile.profileCompletionText}}</text>
+            <text wx:for="{{profile.tags}}" wx:key="*this" class="tag tag-soft">{{item}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section card">
+      <view class="section-title">基本资料</view>
+      <view class="info-grid">
+        <view class="info-item">
+          <text class="label">身高</text>
+          <text>{{profile.heightText}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">学历</text>
+          <text>{{profile.education || '待补充'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">职业</text>
+          <text>{{profile.occupation || '待补充'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">收入</text>
+          <text>{{profile.incomeRange || '待补充'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">家乡</text>
+          <text>{{profile.hometown || '待补充'}}</text>
+        </view>
+        <view class="info-item">
+          <text class="label">孩子</text>
+          <text>{{profile.childrenText}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section card">
+      <view class="section-title">三句话认识我</view>
+      <view class="intro-list">
+        <view wx:for="{{profile.introCards}}" wx:key="label" class="intro-item">
+          <view class="intro-label">{{item.label}}</view>
+          <view class="intro-text">{{item.value}}</view>
+        </view>
+      </view>
+      <view wx:if="{{profile.lifestyleTags.length}}" class="lifestyle-row">
+        <text wx:for="{{profile.lifestyleTags}}" wx:key="*this" class="tag tag-warm">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="section card">
+      <view class="section-title">择偶要求</view>
+      <view class="paragraph">{{profile.expectation || '还没有填写择偶要求。'}}</view>
+    </view>
+
+    <view class="section card">
+      <view class="section-title">联系方式</view>
+      <block wx:if="{{profile.canViewContact}}">
+        <block wx:if="{{profile.contactChannel === 'parent'}}">
+          <view class="contact-grid">
+            <view class="contact-item">
+              <text class="label">家长</text>
+              <text>{{profile.parentName || '未填写'}} {{profile.parentRelation || ''}}</text>
+            </view>
+            <view class="contact-item">
+              <text class="label">家长微信</text>
+              <text>{{profile.parentWechatId || '未填写'}}</text>
+            </view>
+            <view class="contact-item">
+              <text class="label">家长手机号</text>
+              <text>{{profile.parentPhone || '未填写'}}</text>
+            </view>
+          </view>
+          <view wx:if="{{profile.parentContactNote}}" class="paragraph contact-note">{{profile.parentContactNote}}</view>
+        </block>
+        <block wx:else>
+          <view class="contact-grid">
+            <view class="contact-item">
+              <text class="label">微信号</text>
+              <text>{{profile.wechatId || '未填写'}}</text>
+            </view>
+            <view class="contact-item">
+              <text class="label">手机号</text>
+              <text>{{profile.phone || '未填写'}}</text>
+            </view>
+          </view>
+          <view wx:if="{{profile.contactNote}}" class="paragraph contact-note">{{profile.contactNote}}</view>
+        </block>
+      </block>
+      <block wx:else>
+        <view class="locked-contact">{{profile.lockedContactText}}</view>
+      </block>
+    </view>
+
+    <view class="section card">
+      <view class="section-title">{{profile.canViewContact ? '聊天入口' : '联系申请'}}</view>
+      <block wx:if="{{profile.canViewContact}}">
+        <view class="chat-ready">双方已同意联系，可以先在小程序里聊几句，确认节奏合适后再交换更多信息。</view>
+        <view class="row-between action-row">
+          <button class="btn btn-ghost" bindtap="toggleFavorite">{{profile.isFavorited ? '取消收藏' : '收藏'}}</button>
+          <button class="btn btn-primary" bindtap="goChat">去聊天</button>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="template-row">
+          <button wx:for="{{greetingTemplates}}" wx:key="label" class="template-chip" catchtap="useGreetingTemplate" data-text="{{item.text}}">
+            {{item.label}}
+          </button>
+        </view>
+        <textarea class="textarea" value="{{message}}" maxlength="120" bindinput="onMessageInput" />
+        <view class="row-between action-row">
+          <button class="btn btn-ghost" bindtap="toggleFavorite">{{profile.isFavorited ? '取消收藏' : '收藏'}}</button>
+          <button class="btn btn-primary" bindtap="contact">{{profile.contactButtonText}}</button>
+        </view>
+      </block>
+    </view>
+
+    <button class="btn btn-danger report-btn" bindtap="report">举报该资料</button>
+  </block>
+</view>

@@ -1,0 +1,35 @@
+<view class="page safe-bottom">
+  <view class="section">
+    <view class="section-title">我的收藏</view>
+    <view class="subtle">收藏只是本地关注记录，联系仍需对方同意。</view>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="card empty">
+    <view>还没有收藏</view>
+    <view class="subtle">回到首页浏览合适的人选。</view>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="id" class="card favorite-card" bindtap="goDetail" data-id="{{item.id}}">
+    <view class="row-start gap-20">
+      <view class="avatar" style="background-color: {{item.avatarColor}};">
+        <image wx:if="{{item.avatarUrl}}" class="avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+        <text wx:else>{{item.avatarText}}</text>
+      </view>
+      <view class="favorite-main">
+        <view class="row-between">
+          <view>
+            <view class="favorite-name">{{item.nickname}}</view>
+            <view class="subtle">{{item.summary}}</view>
+          </view>
+          <text class="chip chip-active">{{item.currentCity}}</text>
+        </view>
+        <view class="favorite-bio">{{item.bioShort}}</view>
+      </view>
+    </view>
+    <view class="row-between favorite-actions">
+      <button class="btn btn-ghost btn-small" catchtap="removeFavorite" data-userid="{{item.userId}}">取消收藏</button>
+      <button class="btn btn-primary btn-small">查看详情</button>
+    </view>
+  </view>
+</view>
+

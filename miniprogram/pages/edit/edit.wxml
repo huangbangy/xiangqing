@@ -1,0 +1,196 @@
+<view class="page safe-bottom">
+  <view class="section card">
+    <view class="row-between">
+      <view>
+        <view class="section-title">我的资料</view>
+        <view class="subtle">当前状态：{{statusText}}</view>
+      </view>
+      <text class="chip chip-active">{{form.currentCity}}</text>
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view class="row-start gap-20">
+      <view class="avatar avatar-lg" style="background-color: {{form.avatarColor}};" bindtap="chooseAvatar">
+        <image wx:if="{{form.avatarUrl}}" class="avatar-img" src="{{form.avatarUrl}}" mode="aspectFill" />
+        <text wx:else>{{form.avatarText || '我'}}</text>
+      </view>
+      <view class="avatar-copy">
+        <view class="label">头像</view>
+        <view class="subtle">点击左侧头像，可从相册或相机选择。</view>
+        <button class="btn btn-ghost btn-small choose-btn" loading="{{uploading}}" disabled="{{uploading}}" bindtap="chooseAvatar">选择头像</button>
+      </view>
+    </view>
+    <view wx:if="{{uploading}}" class="upload-bar">{{uploadingText}}</view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
+      <view class="label">昵称</view>
+      <input class="input" value="{{form.nickname}}" placeholder="例如：新化小溪" data-field="nickname" bindinput="onInput" />
+    </view>
+
+    <view class="form-grid">
+      <view>
+        <view class="label">性别</view>
+        <picker range="{{genderOptions}}" value="{{genderIndex}}" data-field="gender" bindchange="onPickerChange">
+          <view class="input">{{genderOptions[genderIndex]}}</view>
+        </picker>
+      </view>
+      <view>
+        <view class="label">年龄</view>
+        <input class="input" type="number" value="{{form.age}}" placeholder="例如 28" data-field="age" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view class="form-grid">
+      <view>
+        <view class="label">家乡</view>
+        <picker range="{{hometownOptions}}" value="{{hometownIndex}}" data-field="hometown" bindchange="onPickerChange">
+          <view class="input">{{hometownOptions[hometownIndex]}}</view>
+        </picker>
+      </view>
+      <view>
+        <view class="label">所在地</view>
+        <picker range="{{currentCityOptions}}" value="{{currentCityIndex}}" data-field="currentCity" bindchange="onPickerChange">
+          <view class="input">{{currentCityOptions[currentCityIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="form-grid">
+      <view>
+        <view class="label">身高 cm</view>
+        <input class="input" type="number" value="{{form.height}}" placeholder="例如 165" data-field="height" bindinput="onInput" />
+      </view>
+      <view>
+        <view class="label">学历</view>
+        <picker range="{{educationOptions}}" value="{{educationIndex}}" data-field="education" bindchange="onPickerChange">
+          <view class="input">{{educationOptions[educationIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view>
+      <view class="label">职业</view>
+      <input class="input" value="{{form.occupation}}" placeholder="例如：教师、护士、工程师" data-field="occupation" bindinput="onInput" />
+    </view>
+
+    <view class="form-grid">
+      <view>
+        <view class="label">收入区间</view>
+        <picker range="{{incomeRangeOptions}}" value="{{incomeRangeIndex}}" data-field="incomeRange" bindchange="onPickerChange">
+          <view class="input">{{incomeRangeOptions[incomeRangeIndex]}}</view>
+        </picker>
+      </view>
+      <view>
+        <view class="label">婚姻状态</view>
+        <picker range="{{maritalStatusOptions}}" value="{{maritalStatusIndex}}" data-field="maritalStatus" bindchange="onPickerChange">
+          <view class="input">{{maritalStatusOptions[maritalStatusIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view class="form-grid">
+      <view>
+        <view class="label">孩子情况</view>
+        <picker range="{{hasChildrenOptions}}" value="{{hasChildrenIndex}}" bindchange="onChildrenChange">
+          <view class="input">{{hasChildrenOptions[hasChildrenIndex]}}</view>
+        </picker>
+      </view>
+      <view>
+        <view class="label">住房情况</view>
+        <picker range="{{houseStatusOptions}}" value="{{houseStatusIndex}}" data-field="houseStatus" bindchange="onPickerChange">
+          <view class="input">{{houseStatusOptions[houseStatusIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <view>
+      <view class="label">车辆情况</view>
+      <picker range="{{carStatusOptions}}" value="{{carStatusIndex}}" data-field="carStatus" bindchange="onPickerChange">
+        <view class="input">{{carStatusOptions[carStatusIndex]}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
+      <view class="section-title">三句话认识我</view>
+      <view class="subtle">比长篇介绍更好读，也更容易被真正合适的人记住。</view>
+    </view>
+    <view>
+      <view class="label">我的生活节奏</view>
+      <textarea class="textarea short-textarea" maxlength="90" value="{{form.lifeRhythm}}" placeholder="例如：工作日规律上班，晚上会散步或做饭" data-field="lifeRhythm" bindinput="onInput" />
+    </view>
+    <view>
+      <view class="label">我看重的关系</view>
+      <textarea class="textarea short-textarea" maxlength="90" value="{{form.relationshipView}}" placeholder="例如：希望能好好说话，也能一起把日子过稳" data-field="relationshipView" bindinput="onInput" />
+    </view>
+    <view>
+      <view class="label">周末通常怎么过</view>
+      <textarea class="textarea short-textarea" maxlength="90" value="{{form.weekendPlan}}" placeholder="例如：常在城区逛逛，偶尔回家陪父母" data-field="weekendPlan" bindinput="onInput" />
+    </view>
+    <view>
+      <view class="label">生活标签</view>
+      <view class="tag-picker">
+        <button wx:for="{{tagOptions}}" wx:key="*this" class="tag-toggle {{form.lifestyleTags.indexOf(item) >= 0 ? 'tag-toggle-active' : ''}}" catchtap="toggleTag" data-tag="{{item}}">
+          {{item}}
+        </button>
+      </view>
+      <view class="subtle tag-hint">最多选 6 个，挑最像自己的就行。</view>
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
+      <view class="section-title">联系方式</view>
+      <view class="subtle">只有你同意对方的联系申请后，对方才能看到这里的信息。</view>
+    </view>
+    <view>
+      <view class="label">微信号</view>
+      <input class="input" value="{{form.wechatId}}" placeholder="例如：xinhua_demo" data-field="wechatId" bindinput="onInput" />
+    </view>
+    <view>
+      <view class="label">手机号</view>
+      <input class="input" type="number" value="{{form.phone}}" placeholder="可选" data-field="phone" bindinput="onInput" />
+    </view>
+    <view>
+      <view class="label">联系备注</view>
+      <textarea class="textarea contact-note" maxlength="120" value="{{form.contactNote}}" placeholder="例如：工作日晚上回复较快" data-field="contactNote" bindinput="onInput" />
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
+      <view class="label">自我介绍</view>
+      <textarea class="textarea" maxlength="300" value="{{form.bio}}" placeholder="简单介绍你的性格、工作、生活习惯" data-field="bio" bindinput="onInput" />
+    </view>
+    <view>
+      <view class="label">择偶要求</view>
+      <textarea class="textarea" maxlength="300" value="{{form.expectation}}" placeholder="写清楚你比较看重什么" data-field="expectation" bindinput="onInput" />
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view class="row-between">
+      <view>
+        <view class="section-title">相册</view>
+        <view class="subtle">最多 6 张，已接入云存储；提交审核前建议放清晰生活照。</view>
+      </view>
+      <button class="btn btn-ghost btn-small" loading="{{uploading}}" disabled="{{uploading}}" bindtap="choosePhotos">添加</button>
+    </view>
+    <view wx:if="{{!form.photos.length}}" class="empty photo-empty">还没有上传相册照片</view>
+    <view wx:else class="photo-grid">
+      <view wx:for="{{form.photos}}" wx:key="*this" class="photo-item">
+        <image src="{{item}}" mode="aspectFill" bindtap="previewPhoto" data-index="{{index}}" />
+        <button class="photo-remove" catchtap="removePhoto" data-index="{{index}}">删除</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="row-between gap-16 bottom-actions">
+    <button class="btn btn-ghost" disabled="{{uploading}}" bindtap="saveDraft">保存草稿</button>
+    <button class="btn btn-primary" disabled="{{uploading}}" bindtap="submitReview">提交审核</button>
+  </view>
+</view>

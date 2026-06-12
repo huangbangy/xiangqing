@@ -1,0 +1,43 @@
+.request-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.request-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6rpx;
+}
+
+.request-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8rpx;
+}
+
+.request-channel {
+  background: #fff1f2;
+  color: #b5362b;
+}
+
+.request-message {
+  margin-top: 16rpx;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.request-contact {
+  margin-top: 16rpx;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  background: #fff7f7;
+  color: #7f1d1d;
+  line-height: 1.6;
+  font-size: 24rpx;
+}
+
+.request-actions {
+  margin-top: 20rpx;
+}

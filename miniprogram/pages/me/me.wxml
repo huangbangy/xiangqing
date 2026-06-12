@@ -1,0 +1,123 @@
+<view class="page safe-bottom">
+  <view class="section card">
+    <view class="row-start gap-20">
+      <view class="avatar avatar-lg" style="background-color: {{user.avatarColor}};">
+        <text>{{user.avatarText}}</text>
+      </view>
+      <view class="me-main">
+        <view class="me-name">{{user.nickname}}</view>
+        <view class="subtle">账号状态：{{user.status === 'banned' ? '已封禁' : '正常'}}</view>
+        <view class="tag-row">
+          <text class="tag tag-soft">资料：{{statusText}}</text>
+          <text wx:if="{{user.role === 'admin'}}" class="tag">管理员</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card completion-card">
+    <view class="row-between">
+      <view>
+        <view class="section-title">资料完整度</view>
+        <view class="subtle">补齐后更容易被推荐，也更方便审核。</view>
+      </view>
+      <text class="completion-score">{{profileCompletion.score}}%</text>
+    </view>
+    <view class="progress-track completion-track">
+      <view class="progress-fill" style="width: {{profileCompletion.score}}%;"></view>
+    </view>
+    <view class="completion-missing">{{profileCompletion.hintText}}</view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">当前身份</view>
+    <view class="mode-list">
+      <button wx:for="{{modeOptions}}" wx:key="value" class="mode-card {{mode === item.value ? 'mode-card-active' : ''}}" catchtap="switchMode" data-mode="{{item.value}}">
+        <view class="mode-title">{{item.label}}</view>
+        <view class="mode-desc">{{item.desc}}</view>
+      </button>
+    </view>
+    <view class="subtle mode-note">家长代看只用于帮成年子女浏览和发起家长沟通，正式上线前会增加本人授权确认。</view>
+  </view>
+
+  <view class="section stat-grid">
+    <view class="card stat-card">
+      <view class="stat-number">{{counts.favorites}}</view>
+      <view class="subtle">我的收藏</view>
+    </view>
+    <view class="card stat-card">
+      <view class="stat-number">{{counts.inbox}}</view>
+      <view class="subtle">收到申请</view>
+    </view>
+    <view class="card stat-card">
+      <view class="stat-number">{{counts.outbox}}</view>
+      <view class="subtle">发出申请</view>
+    </view>
+    <view class="card stat-card">
+      <view class="stat-number">{{counts.messages}}</view>
+      <view class="subtle">消息会话</view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="row-between">
+      <view>
+        <view class="section-title">最近浏览</view>
+        <view class="subtle">刚看过的人，会自动留在这里。</view>
+      </view>
+      <text class="chip chip-active">{{recentViews.length}} 位</text>
+    </view>
+    <view wx:if="{{!recentViews.length}}" class="empty recent-empty">还没有浏览记录</view>
+    <view wx:else class="recent-list">
+      <view wx:for="{{recentViews}}" wx:key="id" class="recent-card" bindtap="goDetail" data-id="{{item.id}}">
+        <view class="row-start gap-16">
+          <view class="avatar recent-avatar" style="background-color: {{item.avatarColor}};">
+            <image wx:if="{{item.avatarUrl}}" class="avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+            <text wx:else>{{item.avatarText}}</text>
+          </view>
+          <view class="recent-main">
+            <view class="recent-name">{{item.nickname}}</view>
+            <view class="subtle">{{item.summary}}</view>
+            <view class="recent-bio">{{item.bioShort}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card action-list">
+    <button class="action-row" bindtap="goEdit">
+      <text>编辑我的资料</text>
+      <text class="subtle">完善后提交审核</text>
+    </button>
+    <button class="action-row" bindtap="goFavorites">
+      <text>我的收藏</text>
+      <text class="subtle">{{counts.favorites}} 位</text>
+    </button>
+    <button class="action-row" bindtap="goRequests">
+      <text>联系申请</text>
+      <text class="subtle">收 {{counts.inbox}} / 发 {{counts.outbox}}</text>
+    </button>
+    <button class="action-row" bindtap="goMessages">
+      <text>消息</text>
+      <text class="subtle">{{counts.messages}} 个会话</text>
+    </button>
+  </view>
+
+  <view class="section card stack-12">
+    <view class="section-title">管理入口</view>
+    <view class="subtle">MVP 阶段先用本地口令进入，正式上线会改成管理员账号权限。</view>
+    <input class="input" password value="{{adminCode}}" placeholder="输入管理员口令" bindinput="onAdminCodeInput" />
+    <button class="btn btn-primary" bindtap="enterAdmin">进入后台</button>
+  </view>
+
+  <view wx:if="{{cloudEnabled}}" class="section card stack-12">
+    <view class="section-title">云开发自检</view>
+    <view class="subtle">当前环境：{{cloudEnv}}</view>
+    <view class="cloud-actions">
+      <button class="btn btn-ghost" bindtap="testCloud">检测云函数和 OPENID</button>
+      <button class="btn btn-primary" bindtap="initCloudDatabase">初始化真实数据库</button>
+      <button class="btn btn-ghost" bindtap="checkCloudDatabase">查看云端数据数量</button>
+    </view>
+  </view>
+</view>

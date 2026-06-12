@@ -1,0 +1,56 @@
+<view class="page safe-bottom">
+  <view class="section">
+    <view class="section-title">联系申请</view>
+    <view class="segmented">
+      <view wx:for="{{tabs}}" wx:key="value" class="segmented-item {{tab === item.value ? 'segmented-item-active' : ''}}" data-tab="{{item.value}}" bindtap="switchTab">
+        {{item.label}}
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="card empty">
+    <view>{{tab === 'inbox' ? '暂时没有收到申请' : '暂时没有发出申请'}}</view>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="id" class="card request-card">
+    <view class="row-start gap-20">
+      <view class="avatar" style="background-color: {{item.displayProfile.avatarColor}};">
+        <image wx:if="{{item.displayProfile.avatarUrl}}" class="avatar-img" src="{{item.displayProfile.avatarUrl}}" mode="aspectFill" />
+        <text wx:else>{{item.displayProfile.avatarText}}</text>
+      </view>
+      <view class="request-main">
+        <view class="row-between">
+          <view>
+            <view class="request-name">{{item.displayProfile.nickname}}</view>
+            <view class="subtle">{{item.displayProfile.gender}} · {{item.displayProfile.age}}岁 · {{item.displayProfile.currentCity}}</view>
+          </view>
+          <view class="request-badges">
+            <text class="chip request-channel">{{item.channelText}}</text>
+            <text class="chip">{{item.statusText}}</text>
+          </view>
+        </view>
+        <view class="request-message">{{item.messageText}}</view>
+        <view wx:if="{{item.status === 'accepted' && item.displayProfile.canViewContact}}" class="request-contact">
+          <block wx:if="{{item.displayProfile.contactChannel === 'parent'}}">
+            <view>家长：{{item.displayProfile.parentName || '未填写'}} {{item.displayProfile.parentRelation || ''}}</view>
+            <view>家长微信：{{item.displayProfile.parentWechatId || '未填写'}}</view>
+            <view>家长手机：{{item.displayProfile.parentPhone || '未填写'}}</view>
+          </block>
+          <block wx:else>
+            <view>微信号：{{item.displayProfile.wechatId || '未填写'}}</view>
+            <view>手机号：{{item.displayProfile.phone || '未填写'}}</view>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <view class="row-between request-actions">
+      <button class="btn btn-ghost btn-small" bindtap="goDetail" data-id="{{item.displayProfile.id}}">查看资料</button>
+      <view wx:if="{{tab === 'inbox' && item.status === 'pending'}}" class="row gap-12">
+        <button class="btn btn-ghost btn-small" catchtap="respond" data-id="{{item.id}}" data-decision="reject">拒绝</button>
+        <button class="btn btn-primary btn-small" catchtap="respond" data-id="{{item.id}}" data-decision="accept">同意</button>
+      </view>
+      <button wx:elif="{{item.status === 'accepted' && item.conversationId}}" class="btn btn-primary btn-small" catchtap="goChat" data-id="{{item.conversationId}}">去聊天</button>
+    </view>
+  </view>
+</view>

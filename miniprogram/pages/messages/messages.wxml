@@ -1,0 +1,45 @@
+<view class="page safe-bottom">
+  <view class="section row-between messages-head">
+    <view>
+      <view class="section-title">消息</view>
+      <view class="subtle">申请通过后，聊天会出现在这里。</view>
+    </view>
+    <text class="chip chip-active">{{list.length}} 个会话</text>
+  </view>
+
+  <view wx:if="{{!list.length}}" class="card empty">
+    <view>还没有可聊天的人</view>
+    <view class="subtle">先发起联系申请，双方同意后再聊天。</view>
+    <button class="btn btn-primary empty-action" bindtap="goIndex">去首页看看</button>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="id" class="card message-card" bindtap="goChat" data-id="{{item.id}}">
+    <view class="row-start gap-20">
+      <view class="avatar" style="background-color: {{item.peerProfile.avatarColor}};">
+        <image wx:if="{{item.peerProfile.avatarUrl}}" class="avatar-img" src="{{item.peerProfile.avatarUrl}}" mode="aspectFill" />
+        <text wx:else>{{item.peerProfile.avatarText}}</text>
+      </view>
+      <view class="message-main">
+        <view class="row-between message-top">
+          <view class="message-title-wrap">
+            <view class="message-name">{{item.peerProfile.nickname}}</view>
+            <view class="subtle">{{item.peerProfile.summary}}</view>
+          </view>
+          <view class="message-meta">
+            <text class="message-time">{{item.timeText}}</text>
+            <text wx:if="{{item.unreadCount}}" class="unread-dot">{{item.unreadCount}}</text>
+          </view>
+        </view>
+        <view class="message-last">{{item.lastMessageText}}</view>
+        <view class="message-tags">
+          <text class="tag tag-soft">{{item.channelText}}</text>
+          <text wx:if="{{item.peerProfile.bioShort}}" class="tag tag-warm">{{item.peerProfile.bioShort}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="row-between message-actions">
+      <button class="btn btn-ghost btn-small" catchtap="goDetail" data-id="{{item.peerProfile.id}}">看资料</button>
+      <button class="btn btn-primary btn-small" catchtap="goChat" data-id="{{item.id}}">去聊天</button>
+    </view>
+  </view>
+</view>

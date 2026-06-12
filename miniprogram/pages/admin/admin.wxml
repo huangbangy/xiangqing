@@ -1,0 +1,95 @@
+<view class="page safe-bottom">
+  <view wx:if="{{error}}" class="card empty">
+    <view>{{error}}</view>
+    <view class="subtle">请先在“我的”页面输入管理员口令。</view>
+  </view>
+
+  <block wx:else>
+    <view class="section">
+      <view class="section-title">管理后台</view>
+      <view class="summary-grid">
+        <view class="card summary-card">
+          <view class="summary-number">{{summary.pendingProfiles}}</view>
+          <view class="subtle">待审核</view>
+        </view>
+        <view class="card summary-card">
+          <view class="summary-number">{{summary.reports}}</view>
+          <view class="subtle">待处理举报</view>
+        </view>
+        <view class="card summary-card">
+          <view class="summary-number">{{summary.approvedProfiles}}</view>
+          <view class="subtle">公开资料</view>
+        </view>
+        <view class="card summary-card">
+          <view class="summary-number">{{summary.bannedUsers}}</view>
+          <view class="subtle">封禁用户</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="section segmented">
+      <view wx:for="{{tabs}}" wx:key="value" class="segmented-item {{tab === item.value ? 'segmented-item-active' : ''}}" data-tab="{{item.value}}" bindtap="switchTab">
+        {{item.label}}
+      </view>
+    </view>
+
+    <view wx:if="{{tab === 'pending'}}">
+      <view wx:if="{{!pendingProfiles.length}}" class="card empty">暂无待审核资料</view>
+      <view wx:for="{{pendingProfiles}}" wx:key="id" class="card admin-card">
+        <view class="row-start gap-20">
+          <view class="avatar" style="background-color: {{item.avatarColor}};">
+            <image wx:if="{{item.avatarUrl}}" class="avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+            <text wx:else>{{item.avatarText}}</text>
+          </view>
+          <view class="admin-main">
+            <view class="admin-name">{{item.nickname}}</view>
+            <view class="subtle">{{item.gender}} · {{item.age}}岁 · {{item.currentCity}} · {{item.occupation}}</view>
+            <view class="admin-copy">{{item.bio}}</view>
+          </view>
+        </view>
+        <view class="row-between admin-actions">
+          <button class="btn btn-danger btn-small" catchtap="reviewProfile" data-id="{{item.id}}" data-action="reject">驳回</button>
+          <button class="btn btn-ghost btn-small" catchtap="reviewProfile" data-id="{{item.id}}" data-action="hide">下架</button>
+          <button class="btn btn-primary btn-small" catchtap="reviewProfile" data-id="{{item.id}}" data-action="approve">通过</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:elif="{{tab === 'reports'}}">
+      <view wx:if="{{!reports.length}}" class="card empty">暂无举报记录</view>
+      <view wx:for="{{reports}}" wx:key="id" class="card admin-card">
+        <view class="row-between">
+          <view>
+            <view class="admin-name">{{item.category}}</view>
+            <view class="subtle">对象：{{item.targetName}} · {{item.statusText}}</view>
+          </view>
+          <text class="chip">{{item.statusText}}</text>
+        </view>
+        <view class="admin-copy">{{item.reason}}</view>
+        <view class="row-between admin-actions">
+          <button class="btn btn-ghost btn-small" catchtap="resolveReport" data-id="{{item.id}}" data-mode="resolve">标记处理</button>
+          <button class="btn btn-danger btn-small" catchtap="resolveReport" data-id="{{item.id}}" data-mode="hide">下架资料</button>
+          <button class="btn btn-danger btn-small" catchtap="resolveReport" data-id="{{item.id}}" data-mode="ban">封禁</button>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else>
+      <view wx:if="{{!users.length}}" class="card empty">暂无用户</view>
+      <view wx:for="{{users}}" wx:key="id" class="card admin-card">
+        <view class="row-between">
+          <view class="row-start gap-16">
+            <view class="avatar" style="background-color: {{item.avatarColor}};">
+              <text>{{item.avatarText}}</text>
+            </view>
+            <view>
+              <view class="admin-name">{{item.nickname}}</view>
+              <view class="subtle">{{item.role}} · {{item.status}} · {{item.profileStatus}}</view>
+            </view>
+          </view>
+          <button wx:if="{{item.status !== 'banned' && !item.isCurrent && item.role !== 'admin'}}" class="btn btn-danger btn-small" catchtap="banUser" data-userid="{{item.id}}">封禁</button>
+        </view>
+      </view>
+    </view>
+  </block>
+</view>

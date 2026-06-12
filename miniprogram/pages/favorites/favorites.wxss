@@ -1,0 +1,22 @@
+.favorite-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.favorite-name {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6rpx;
+}
+
+.favorite-bio {
+  margin-top: 14rpx;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.favorite-actions {
+  margin-top: 20rpx;
+}
+

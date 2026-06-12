@@ -1,0 +1,51 @@
+<view class="page chat-page safe-bottom">
+  <block wx:if="{{conversation}}">
+    <view class="card chat-profile">
+      <view class="row-start gap-20">
+        <view class="avatar" style="background-color: {{conversation.peerProfile.avatarColor}};">
+          <image wx:if="{{conversation.peerProfile.avatarUrl}}" class="avatar-img" src="{{conversation.peerProfile.avatarUrl}}" mode="aspectFill" />
+          <text wx:else>{{conversation.peerProfile.avatarText}}</text>
+        </view>
+        <view class="chat-profile-main">
+          <view class="row-between">
+            <view>
+              <view class="chat-name">{{conversation.peerProfile.nickname}}</view>
+              <view class="subtle">{{conversation.peerProfile.summary}}</view>
+            </view>
+            <text class="chip chip-active">{{conversation.channelText}}</text>
+          </view>
+          <button class="btn btn-ghost btn-small profile-btn" bindtap="goProfile">查看资料</button>
+        </view>
+      </view>
+    </view>
+
+    <scroll-view class="chat-scroll" scroll-y="true" scroll-with-animation="true" scroll-into-view="{{scrollIntoView}}">
+      <view class="safety-tip">聊天前先核实身份，不转账、不泄露证件信息；线下见面建议选公共场所。</view>
+      <view wx:for="{{messages}}" wx:key="id" id="msg-{{item.id}}" class="message-row {{item.isMine ? 'message-row-mine' : ''}} {{item.isSystem ? 'message-row-system' : ''}}">
+        <block wx:if="{{item.isSystem}}">
+          <view class="system-message">{{item.text}}</view>
+        </block>
+        <block wx:else>
+          <view wx:if="{{!item.isMine}}" class="avatar chat-avatar" style="background-color: {{item.senderAvatarColor}};">
+            <image wx:if="{{item.senderAvatarUrl}}" class="avatar-img" src="{{item.senderAvatarUrl}}" mode="aspectFill" />
+            <text wx:else>{{item.senderAvatarText}}</text>
+          </view>
+          <view class="bubble-wrap">
+            <view class="message-time">{{item.timeText}}</view>
+            <view class="message-bubble">{{item.text}}</view>
+          </view>
+        </block>
+      </view>
+    </scroll-view>
+
+    <view class="chat-composer-wrap">
+      <view class="quick-replies">
+        <button wx:for="{{quickReplies}}" wx:key="*this" class="quick-chip" catchtap="useQuickReply" data-text="{{item}}">{{item}}</button>
+      </view>
+      <view class="composer-row">
+        <input class="chat-input" value="{{input}}" confirm-type="send" placeholder="写点真诚的开场" bindinput="onInput" bindconfirm="sendMessage" />
+        <button class="btn btn-primary send-btn" bindtap="sendMessage">发送</button>
+      </view>
+    </view>
+  </block>
+</view>

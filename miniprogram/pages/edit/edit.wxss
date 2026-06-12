@@ -1,0 +1,95 @@
+.avatar-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.choose-btn {
+  margin-top: 16rpx;
+  width: 200rpx;
+}
+
+.upload-bar {
+  padding: 14rpx 18rpx;
+  border-radius: 8rpx;
+  background: #fff1f2;
+  color: #b5362b;
+  font-size: 24rpx;
+}
+
+.photo-empty {
+  padding: 28rpx;
+}
+
+.contact-note {
+  min-height: 120rpx;
+}
+
+.short-textarea {
+  min-height: 130rpx;
+}
+
+.tag-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.tag-toggle {
+  height: 52rpx;
+  line-height: 52rpx;
+  padding: 0 18rpx;
+  border-radius: 26rpx;
+  background: #fff7f7;
+  color: #7f1d1d;
+  font-size: 24rpx;
+}
+
+.tag-toggle-active {
+  background: #ffe4e6;
+  color: #b5362b;
+}
+
+.tag-hint {
+  margin-top: 12rpx;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12rpx;
+}
+
+.photo-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 8rpx;
+  background: #fff1f2;
+}
+
+.photo-item image {
+  width: 100%;
+  height: 100%;
+}
+
+.photo-remove {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 44rpx;
+  line-height: 44rpx;
+  border-radius: 0;
+  background: rgba(185, 28, 28, 0.78);
+  color: #ffffff;
+  font-size: 22rpx;
+}
+
+.bottom-actions {
+  position: sticky;
+  bottom: 24rpx;
+}
+
+.bottom-actions .btn {
+  flex: 1;
+}

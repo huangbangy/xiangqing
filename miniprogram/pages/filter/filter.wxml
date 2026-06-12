@@ -1,0 +1,53 @@
+<view class="page safe-bottom">
+  <view class="section">
+    <view class="section-title">筛选条件</view>
+    <view class="subtle">当前：{{summary}}</view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
+      <view class="label">性别</view>
+      <picker range="{{genderOptions}}" range-key="label" value="{{genderIndex}}" data-field="gender" bindchange="onPickerChange">
+        <view class="input">{{genderOptions[genderIndex].label}}</view>
+      </picker>
+    </view>
+
+    <view>
+      <view class="label">地区</view>
+      <picker range="{{regionOptions}}" range-key="label" value="{{regionIndex}}" data-field="region" bindchange="onPickerChange">
+        <view class="input">{{regionOptions[regionIndex].label}}</view>
+      </picker>
+    </view>
+
+    <view class="form-grid">
+      <view>
+        <view class="label">最小年龄</view>
+        <input class="input" type="number" value="{{filters.ageMin}}" placeholder="不限" data-field="ageMin" bindinput="onInput" />
+      </view>
+      <view>
+        <view class="label">最大年龄</view>
+        <input class="input" type="number" value="{{filters.ageMax}}" placeholder="不限" data-field="ageMax" bindinput="onInput" />
+      </view>
+    </view>
+
+    <view>
+      <view class="label">婚姻状态</view>
+      <picker range="{{maritalStatusOptions}}" range-key="label" value="{{maritalStatusIndex}}" data-field="maritalStatus" bindchange="onPickerChange">
+        <view class="input">{{maritalStatusOptions[maritalStatusIndex].label}}</view>
+      </picker>
+    </view>
+
+    <view>
+      <view class="label">学历</view>
+      <picker range="{{educationOptions}}" range-key="label" value="{{educationIndex}}" data-field="education" bindchange="onPickerChange">
+        <view class="input">{{educationOptions[educationIndex].label}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="row-between gap-16">
+    <button class="btn btn-ghost" bindtap="reset">重置</button>
+    <button class="btn btn-primary" bindtap="save">应用筛选</button>
+  </view>
+</view>
+

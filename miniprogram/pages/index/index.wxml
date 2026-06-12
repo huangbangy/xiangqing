@@ -1,0 +1,151 @@
+<view class="page index-page safe-bottom">
+  <view class="section card top-panel">
+    <view class="row-between top-hero">
+      <view class="festival-hero">
+        <view class="festival-mark-wrap">
+          <text class="festival-mark">喜</text>
+        </view>
+        <view class="festival-copy">
+          <view class="index-title">新化相亲</view>
+          <view class="subtle">本地真实资料，先审核后展示</view>
+          <view class="festival-sub">给认真生活的人，一个更体面的开始。</view>
+        </view>
+      </view>
+      <button class="btn btn-ghost btn-small" bindtap="goMe">我的</button>
+    </view>
+
+    <view class="hero-chips">
+      <text class="soft-chip">已审核</text>
+      <text class="soft-chip soft-chip-warm">同城优先</text>
+      <text class="soft-chip">联系方式保护</text>
+      <text class="soft-chip soft-chip-mode">{{viewerModeText}}</text>
+      <text class="soft-chip">{{dataSourceText}}</text>
+    </view>
+
+    <view class="hero-stat">
+      <view>
+        <view class="hero-stat-number">{{visibleCount}}</view>
+        <view class="subtle">当前可浏览资料</view>
+      </view>
+      <view class="hero-stat-copy">先看生活节奏，再决定要不要认识。</view>
+    </view>
+
+    <view class="search-row">
+      <input class="input search-input" value="{{keyword}}" placeholder="搜索职业、地区、介绍" confirm-type="search" bindinput="onKeywordInput" bindconfirm="onSearch" />
+      <button class="btn btn-primary btn-small" bindtap="onSearch">搜索</button>
+      <button class="btn btn-ghost btn-small" bindtap="goFilter">筛选</button>
+    </view>
+
+    <view class="row-between filter-line">
+      <text class="subtle">条件：{{filterSummary}}</text>
+      <text class="subtle">{{list.length}} 位</text>
+    </view>
+  </view>
+
+  <view class="section card recommend-panel">
+    <view class="row-between recommend-head">
+      <view>
+        <view class="section-title">今日推荐</view>
+        <view class="subtle">按同城、生活节奏和资料完整度先挑几位。</view>
+      </view>
+      <view class="recommend-tools">
+        <button class="recommend-tool" catchtap="nextRecommendations">换一批</button>
+        <button wx:if="{{recommendationStats.hiddenCount}}" class="recommend-tool recommend-tool-muted" catchtap="resetRecommendations">恢复</button>
+        <text class="recommend-count">{{recommendations.length}} 位</text>
+      </view>
+    </view>
+
+    <view wx:if="{{!recommendations.length}}" class="recommend-empty">
+      <view>暂无新的今日推荐</view>
+      <view class="subtle">可以恢复不感兴趣的人选，或去列表继续筛选。</view>
+      <button wx:if="{{recommendationStats.hiddenCount}}" class="btn btn-primary btn-small recommend-empty-action" catchtap="resetRecommendations">恢复推荐池</button>
+    </view>
+
+    <view wx:else class="recommend-list">
+      <view wx:for="{{recommendations}}" wx:key="id" class="recommend-card" bindtap="goDetail" data-id="{{item.id}}">
+        <view class="row-start gap-16">
+          <view class="avatar avatar-recommend" style="background-color: {{item.avatarColor}};">
+            <image wx:if="{{item.avatarUrl}}" class="avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+            <text wx:else>{{item.avatarText}}</text>
+          </view>
+          <view class="recommend-main">
+            <view class="row-between recommend-top">
+              <view>
+                <view class="recommend-name">{{item.nickname}}</view>
+                <view class="subtle">{{item.summary}}</view>
+              </view>
+              <text class="recommend-score">{{item.matchScoreText}}</text>
+            </view>
+            <view class="recommend-reason">{{item.matchReasonText}}</view>
+          </view>
+        </view>
+
+        <view class="recommend-tags">
+          <text class="tag tag-soft">{{item.profileCompletionText}}</text>
+          <text class="tag tag-soft">{{item.contactChannelText}}</text>
+          <text wx:for="{{item.lifestyleTags}}" wx:key="*this" class="tag tag-warm">{{item}}</text>
+        </view>
+
+        <view class="row-between recommend-actions">
+          <button class="btn btn-ghost btn-small" catchtap="dismissRecommendation" data-userid="{{item.userId}}">
+            不感兴趣
+          </button>
+          <button class="btn btn-ghost btn-small" catchtap="toggleFavorite" data-userid="{{item.userId}}">
+            {{item.isFavorited ? '已收藏' : '收藏'}}
+          </button>
+          <button class="btn btn-primary btn-small" catchtap="contact" data-userid="{{item.userId}}">
+            {{item.contactButtonText}}
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section">
+    <view wx:if="{{!list.length}}" class="card empty">
+      <view>暂无匹配资料</view>
+      <view class="subtle">可以放宽筛选条件，或先完善自己的资料。</view>
+      <button class="btn btn-primary empty-action" bindtap="goEdit">完善资料</button>
+    </view>
+
+    <view wx:for="{{list}}" wx:key="id" class="card profile-card" bindtap="goDetail" data-id="{{item.id}}">
+      <view class="row-start gap-20">
+        <view class="avatar">
+          <image wx:if="{{item.avatarUrl}}" class="avatar-img" src="{{item.avatarUrl}}" mode="aspectFill" />
+          <text wx:else>{{item.avatarText}}</text>
+        </view>
+        <view class="profile-main">
+          <view class="row-between profile-head">
+            <view>
+              <text class="profile-name">{{item.nickname}}</text>
+              <text class="profile-meta">{{item.gender}} · {{item.age}}岁</text>
+            </view>
+            <view class="badge-stack">
+              <text class="chip chip-active">{{item.currentCity}}</text>
+              <text class="publisher-badge">{{item.publisherText}}</text>
+            </view>
+          </view>
+          <view class="subtle profile-summary">{{item.summary}}</view>
+          <view class="profile-intro">{{item.introShort || item.bioShort}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{item.lifestyleTags.length}}" class="lifestyle-row">
+        <text wx:for="{{item.lifestyleTags}}" wx:key="*this" class="tag tag-warm">{{item}}</text>
+      </view>
+
+      <view class="tag-row">
+        <text wx:for="{{item.tags}}" wx:key="*this" class="tag">{{item}}</text>
+      </view>
+
+      <view class="row-between card-actions">
+        <button class="btn btn-ghost btn-small" catchtap="toggleFavorite" data-userid="{{item.userId}}">
+          {{item.isFavorited ? '已收藏' : '收藏'}}
+        </button>
+        <button class="btn btn-primary btn-small" catchtap="contact" data-userid="{{item.userId}}">
+          {{item.contactButtonText}}
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

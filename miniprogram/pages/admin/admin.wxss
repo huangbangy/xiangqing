@@ -1,0 +1,42 @@
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12rpx;
+}
+
+.summary-card {
+  text-align: center;
+}
+
+.summary-number {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #c63d2f;
+}
+
+.admin-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6rpx;
+}
+
+.admin-copy {
+  margin-top: 16rpx;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.admin-actions {
+  gap: 12rpx;
+  margin-top: 22rpx;
+}
+
+.admin-actions .btn {
+  flex: 1;
+}

@@ -1,0 +1,4 @@
+.row-between .btn {
+  flex: 1;
+}
+

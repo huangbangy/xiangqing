@@ -1,0 +1,52 @@
+<view class="page safe-bottom">
+  <view class="section">
+    <view class="section-title">举报资料</view>
+    <view class="subtle">举报会进入后台待处理，不会直接通知对方。</view>
+  </view>
+
+  <view wx:if="{{profile}}" class="section card">
+    <view class="row-start gap-20">
+      <view class="avatar" style="background-color: {{profile.avatarColor}};">
+        <image wx:if="{{profile.avatarUrl}}" class="avatar-img" src="{{profile.avatarUrl}}" mode="aspectFill" />
+        <text wx:else>{{profile.avatarText}}</text>
+      </view>
+      <view>
+        <view class="report-name">{{profile.nickname}}</view>
+        <view class="subtle">{{profile.gender}} · {{profile.age}}岁 · {{profile.currentCity}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
+      <view class="label">举报类型</view>
+      <picker range="{{categoryOptions}}" value="{{categoryIndex}}" bindchange="onCategoryChange">
+        <view class="input">{{categoryOptions[categoryIndex]}}</view>
+      </picker>
+    </view>
+
+    <view>
+      <view class="label">详细说明</view>
+      <textarea class="textarea" maxlength="300" placeholder="请说明你发现的问题" value="{{reason}}" bindinput="onReasonInput" />
+    </view>
+
+    <view>
+      <view class="row-between">
+        <view>
+          <view class="label">证据图片</view>
+          <view class="subtle">最多 3 张，可选</view>
+        </view>
+        <button class="btn btn-ghost btn-small" bindtap="chooseEvidence">添加</button>
+      </view>
+      <view wx:if="{{evidenceUrls.length}}" class="evidence-grid">
+        <view wx:for="{{evidenceUrls}}" wx:key="*this" class="evidence-item">
+          <image src="{{item}}" mode="aspectFill" />
+          <button class="evidence-remove" catchtap="removeEvidence" data-index="{{index}}">删除</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <button class="btn btn-danger" bindtap="submit">提交举报</button>
+</view>
+

@@ -1,0 +1,448 @@
+const service = require('../../utils/service');
+const format = require('../../utils/format');
+const cloudService = require('../../utils/cloud-service');
+
+const cityOptions = [
+  '新化县城区',
+  '上梅街道',
+  '洋溪镇',
+  '桑梓镇',
+  '白溪镇',
+  '奉家镇',
+  '圳上镇',
+  '水车镇',
+  '炉观镇',
+  '其他新化乡镇'
+];
+
+const pickerFields = [
+  'gender',
+  'hometown',
+  'currentCity',
+  'education',
+  'incomeRange',
+  'maritalStatus',
+  'houseStatus',
+  'carStatus'
+];
+
+function optionIndex(options, value) {
+  const index = options.findIndex((item) => item === value);
+  return index >= 0 ? index : 0;
+}
+
+function normalizeForm(profile) {
+  return Object.assign(
+    {
+      nickname: '',
+      avatarText: '',
+      avatarColor: '#c63d2f',
+      avatarUrl: '',
+      gender: '女',
+      age: '',
+      hometown: '新化县城区',
+      currentCity: '新化县城区',
+      height: '',
+      education: '大专',
+      occupation: '',
+      incomeRange: '5-8万',
+      maritalStatus: '未婚',
+      hasChildren: false,
+      houseStatus: '租房',
+      carStatus: '无车',
+      phone: '',
+      wechatId: '',
+      contactNote: '',
+      lifeRhythm: '',
+      relationshipView: '',
+      weekendPlan: '',
+      lifestyleTags: [],
+      bio: '',
+      expectation: '',
+      photos: []
+    },
+    profile || {}
+  );
+}
+
+function isUnuploadedImagePath(path) {
+  return !!(path && !cloudService.isStoredFilePath(path));
+}
+
+function hasUnuploadedImages(form) {
+  const profile = form || {};
+  if (isUnuploadedImagePath(profile.avatarUrl)) {
+    return true;
+  }
+  const photos = Array.isArray(profile.photos) ? profile.photos : [];
+  return photos.some((item) => isUnuploadedImagePath(item));
+}
+
+const tagOptions = [
+  '做饭',
+  '运动',
+  '爬山',
+  '看书',
+  '追剧',
+  '咖啡',
+  '旅行',
+  '宠物',
+  '顾家',
+  '慢热',
+  '开朗',
+  '稳定',
+  '会沟通',
+  '干净生活',
+  '不熬夜',
+  '带孩'
+];
+
+Page({
+  data: {
+    form: normalizeForm({}),
+    statusText: '草稿',
+    uploading: false,
+    uploadingText: '',
+    genderOptions: ['男', '女'],
+    hometownOptions: cityOptions,
+    currentCityOptions: cityOptions,
+    educationOptions: ['高中', '中专', '大专', '本科', '硕士', '博士'],
+    incomeRangeOptions: ['5万以下', '5-8万', '8-12万', '12-20万', '20万以上'],
+    maritalStatusOptions: ['未婚', '离异', '离异带孩'],
+    houseStatusOptions: ['租房', '有房', '有房贷', '与父母同住'],
+    carStatusOptions: ['无车', '有车'],
+    hasChildrenOptions: ['无孩子', '有孩子'],
+    tagOptions,
+    genderIndex: 1,
+    hometownIndex: 0,
+    currentCityIndex: 0,
+    educationIndex: 2,
+    incomeRangeIndex: 1,
+    maritalStatusIndex: 0,
+    houseStatusIndex: 0,
+    carStatusIndex: 0,
+    hasChildrenIndex: 0
+  },
+
+  onLoad() {
+    this.loadProfile();
+  },
+
+  loadProfile() {
+    if (cloudService.isReady()) {
+      cloudService
+        .getMyProfile()
+        .then((profile) => {
+          this.syncForm(normalizeForm(profile));
+        })
+        .catch((err) => {
+          console.warn('cloud get my profile failed, fallback to mock', err);
+          const profile = service.getMyProfile();
+          this.syncForm(normalizeForm(profile));
+        });
+      return;
+    }
+    const profile = service.getMyProfile();
+    this.syncForm(normalizeForm(profile));
+  },
+
+  syncForm(form) {
+    const nextData = {
+      form,
+      statusText: format.formatStatus(form.reviewStatus || 'draft'),
+      hasChildrenIndex: form.hasChildren ? 1 : 0
+    };
+    pickerFields.forEach((field) => {
+      nextData[`${field}Index`] = optionIndex(this.data[`${field}Options`], form[field]);
+    });
+    this.setData(nextData);
+  },
+
+  onInput(event) {
+    const field = event.currentTarget.dataset.field;
+    const rawValue = event.detail.value;
+    const numberFields = ['age', 'height'];
+    const value = numberFields.includes(field) && rawValue !== '' ? Number(rawValue) : rawValue;
+    const nextData = {
+      [`form.${field}`]: value
+    };
+    if (field === 'nickname' && !this.data.form.avatarUrl) {
+      nextData['form.avatarText'] = rawValue ? rawValue.slice(0, 1) : '我';
+    }
+    this.setData(nextData);
+  },
+
+  onPickerChange(event) {
+    const field = event.currentTarget.dataset.field;
+    const index = Number(event.detail.value);
+    const options = this.data[`${field}Options`];
+    this.setData({
+      [`${field}Index`]: index,
+      [`form.${field}`]: options[index]
+    });
+  },
+
+  onChildrenChange(event) {
+    const index = Number(event.detail.value);
+    this.setData({
+      hasChildrenIndex: index,
+      'form.hasChildren': index === 1
+    });
+  },
+
+  toggleTag(event) {
+    const tag = event.currentTarget.dataset.tag;
+    const tags = (this.data.form.lifestyleTags || []).slice();
+    const index = tags.indexOf(tag);
+    if (index >= 0) {
+      tags.splice(index, 1);
+    } else if (tags.length < 6) {
+      tags.push(tag);
+    } else {
+      wx.showToast({
+        title: '最多选择 6 个标签',
+        icon: 'none'
+      });
+      return;
+    }
+    this.setData({
+      'form.lifestyleTags': tags
+    });
+  },
+
+  chooseAvatar() {
+    if (this.data.uploading) {
+      wx.showToast({
+        title: '图片上传中，请稍等',
+        icon: 'none'
+      });
+      return;
+    }
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const localPath = res.tempFilePaths && res.tempFilePaths[0];
+        if (!localPath) {
+          return;
+        }
+        if (cloudService.canUploadFile()) {
+          this.uploadAvatar(localPath);
+          return;
+        }
+        this.setData({
+          'form.avatarUrl': localPath,
+          'form.avatarText': ''
+        });
+      }
+    });
+  },
+
+  uploadAvatar(localPath) {
+    this.setUploading('头像上传中');
+    cloudService
+      .uploadImage(localPath, 'avatars')
+      .then((result) => {
+        this.clearUploading();
+        this.setData({
+          'form.avatarUrl': result.fileID,
+          'form.avatarText': ''
+        });
+        wx.showToast({
+          title: '头像已上传',
+          icon: 'success'
+        });
+      })
+      .catch((err) => {
+        this.clearUploading();
+        wx.showToast({
+          title: err.message || '头像上传失败',
+          icon: 'none'
+        });
+      });
+  },
+
+  choosePhotos() {
+    if (this.data.uploading) {
+      wx.showToast({
+        title: '图片上传中，请稍等',
+        icon: 'none'
+      });
+      return;
+    }
+    const photos = this.data.form.photos || [];
+    if (photos.length >= 6) {
+      wx.showToast({
+        title: '最多上传 6 张',
+        icon: 'none'
+      });
+      return;
+    }
+    const remaining = 6 - photos.length;
+    wx.chooseImage({
+      count: remaining,
+      sizeType: ['compressed'],
+      sourceType: ['album', 'camera'],
+      success: (res) => {
+        const selectedPaths = (res.tempFilePaths || []).slice(0, remaining);
+        if (!selectedPaths.length) {
+          return;
+        }
+        if (cloudService.canUploadFile()) {
+          this.uploadPhotos(selectedPaths, photos);
+          return;
+        }
+        this.setData({
+          'form.photos': photos.concat(selectedPaths).slice(0, 6)
+        });
+      }
+    });
+  },
+
+  uploadPhotos(localPaths, existingPhotos) {
+    this.setUploading('相册上传中');
+    cloudService
+      .uploadImages(localPaths, 'photos')
+      .then((fileIDs) => {
+        this.clearUploading();
+        this.setData({
+          'form.photos': (existingPhotos || []).concat(fileIDs).slice(0, 6)
+        });
+        wx.showToast({
+          title: `已上传 ${fileIDs.length} 张`,
+          icon: 'success'
+        });
+      })
+      .catch((err) => {
+        this.clearUploading();
+        wx.showToast({
+          title: err.message || '相册上传失败',
+          icon: 'none'
+        });
+      });
+  },
+
+  setUploading(text) {
+    this.setData({
+      uploading: true,
+      uploadingText: text || '图片上传中'
+    });
+    wx.showLoading({
+      title: text || '图片上传中',
+      mask: true
+    });
+  },
+
+  clearUploading() {
+    this.setData({
+      uploading: false,
+      uploadingText: ''
+    });
+    wx.hideLoading();
+  },
+
+  ensureCanSave() {
+    if (this.data.uploading) {
+      wx.showToast({
+        title: '图片上传中，请稍等',
+        icon: 'none'
+      });
+      return false;
+    }
+    if (cloudService.isReady() && hasUnuploadedImages(this.data.form)) {
+      wx.showToast({
+        title: '有图片未上传成功',
+        icon: 'none'
+      });
+      return false;
+    }
+    return true;
+  },
+
+  previewPhoto(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    const photos = this.data.form.photos || [];
+    wx.previewImage({
+      current: photos[index],
+      urls: photos
+    });
+  },
+
+  removePhoto(event) {
+    const index = Number(event.currentTarget.dataset.index);
+    const photos = (this.data.form.photos || []).slice();
+    photos.splice(index, 1);
+    this.setData({
+      'form.photos': photos
+    });
+  },
+
+  saveDraft() {
+    if (!this.ensureCanSave()) {
+      return;
+    }
+    if (cloudService.isReady()) {
+      cloudService
+        .saveMyProfile(this.data.form)
+        .then((result) => {
+          this.syncForm(normalizeForm(result.data));
+          wx.showToast({
+            title: result.message || '已保存草稿',
+            icon: 'success'
+          });
+        })
+        .catch((err) => {
+          wx.showToast({
+            title: err.message || '保存失败',
+            icon: 'none'
+          });
+        });
+      return;
+    }
+    const profile = service.saveMyProfile(this.data.form);
+    this.syncForm(normalizeForm(profile));
+    wx.showToast({
+      title: '已保存草稿',
+      icon: 'success'
+    });
+  },
+
+  submitReview() {
+    if (!this.ensureCanSave()) {
+      return;
+    }
+    if (cloudService.isReady()) {
+      cloudService
+        .submitMyProfile(this.data.form)
+        .then((result) => {
+          this.syncForm(normalizeForm(result.data));
+          wx.showToast({
+            title: result.message,
+            icon: 'success'
+          });
+        })
+        .catch((err) => {
+          wx.showToast({
+            title: err.message || '提交失败',
+            icon: 'none'
+          });
+        });
+      return;
+    }
+    service.saveMyProfile(this.data.form);
+    const result = service.submitMyProfile();
+    if (!result.ok) {
+      wx.showToast({
+        title: result.message,
+        icon: 'none'
+      });
+      return;
+    }
+    this.syncForm(normalizeForm(result.data));
+    wx.showToast({
+      title: result.message,
+      icon: 'success'
+    });
+  }
+});
