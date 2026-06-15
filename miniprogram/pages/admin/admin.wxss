@@ -1,3 +1,9 @@
+.admin-title-row {
+  align-items: flex-start;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

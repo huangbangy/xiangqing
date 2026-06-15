@@ -1,0 +1,73 @@
+<view class="page safe-bottom">
+  <view class="section card launch-hero">
+    <view class="row-between">
+      <view>
+        <view class="section-title">上线前自检</view>
+        <view class="subtle">把能自动检查的先跑一遍，剩下的按清单人工确认。</view>
+      </view>
+      <button class="btn btn-primary btn-small" bindtap="runCheck">{{loading ? '检测中' : '重新检测'}}</button>
+    </view>
+    <view class="launch-summary">
+      <view class="summary-pill summary-pass">通过 {{summary.pass}}</view>
+      <view class="summary-pill summary-warn">待确认 {{summary.warn}}</view>
+      <view class="summary-pill summary-fail">需处理 {{summary.fail}}</view>
+    </view>
+    <view class="subtle">最近检测：{{updatedAt || '尚未检测'}}</view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">自动检查</view>
+    <view class="check-list">
+      <view wx:for="{{checks}}" wx:key="key" class="check-card check-{{item.status}}">
+        <view class="row-between check-head">
+          <view class="check-title">{{item.label}}</view>
+          <text class="check-status">{{item.statusText}}</text>
+        </view>
+        <view class="check-desc">{{item.desc}}</view>
+        <view class="check-detail">{{item.detail}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">人工确认清单</view>
+    <view class="manual-list">
+      <view wx:for="{{manualItems}}" wx:key="*this" class="manual-item">
+        <view class="manual-dot"></view>
+        <view>{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="row-between guide-head">
+      <view>
+        <view class="section-title">管理员说明</view>
+        <view class="subtle">审核时先保证真实、安全、可追责，再追求资料数量。</view>
+      </view>
+      <button class="btn btn-ghost btn-small" bindtap="goAdmin">去后台</button>
+    </view>
+    <view class="guide-list">
+      <view wx:for="{{adminSteps}}" wx:key="title" class="guide-item">
+        <view class="guide-title">{{item.title}}</view>
+        <view class="guide-text">{{item.text}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">审核通过建议</view>
+    <view class="rule-row">
+      <text class="rule-label">通过</text>
+      <text>资料真实、成年人、照片合适、介绍清楚、无广告和违规内容。</text>
+    </view>
+    <view class="rule-row">
+      <text class="rule-label rule-warn">驳回</text>
+      <text>信息太少、联系方式异常、照片不清楚、疑似代填但没有本人授权。</text>
+    </view>
+    <view class="rule-row">
+      <text class="rule-label rule-danger">封禁</text>
+      <text>诈骗、骚扰、恶意引流、虚假身份、涉黄涉赌涉政等明显违规内容。</text>
+    </view>
+  </view>
+</view>

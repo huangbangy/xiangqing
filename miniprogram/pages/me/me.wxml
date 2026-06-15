@@ -105,6 +105,10 @@
   </view>
 
   <view class="section card action-list">
+    <button class="action-row action-row-strong" bindtap="goLaunchCheck">
+      <text>上线前自检</text>
+      <text class="subtle">检查云开发、资料、后台</text>
+    </button>
     <button class="action-row" bindtap="goLegal" data-type="terms">
       <text>用户协议</text>
       <text class="subtle">服务规则</text>
@@ -117,7 +121,7 @@
 
   <view class="section card stack-12">
     <view class="section-title">管理入口</view>
-    <view class="subtle">MVP 阶段先用本地口令进入，正式上线会改成管理员账号权限。</view>
+    <view class="subtle">先输入管理员口令进入后台；不会操作时，先看“上线前自检”里的管理员说明。</view>
     <input class="input" password value="{{adminCode}}" placeholder="输入管理员口令" bindinput="onAdminCodeInput" />
     <button class="btn btn-primary" bindtap="enterAdmin">进入后台</button>
   </view>

@@ -6,7 +6,13 @@
 
   <block wx:else>
     <view class="section">
-      <view class="section-title">管理后台</view>
+      <view class="row-between admin-title-row">
+        <view>
+          <view class="section-title">管理后台</view>
+          <view class="subtle">先审核资料，再处理举报，最后看用户风险。</view>
+        </view>
+        <button class="btn btn-ghost btn-small" bindtap="goLaunchGuide">查看说明</button>
+      </view>
       <view class="summary-grid">
         <view class="card summary-card">
           <view class="summary-number">{{summary.pendingProfiles}}</view>

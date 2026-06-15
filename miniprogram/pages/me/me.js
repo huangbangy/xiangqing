@@ -175,6 +175,12 @@ Page({
     });
   },
 
+  goLaunchCheck() {
+    wx.navigateTo({
+      url: '/pages/launch/launch'
+    });
+  },
+
   onAdminCodeInput(event) {
     this.setData({
       adminCode: event.detail.value

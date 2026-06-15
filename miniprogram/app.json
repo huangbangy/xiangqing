@@ -11,6 +11,7 @@
     "pages/chat/chat",
     "pages/report/report",
     "pages/legal/legal",
+    "pages/launch/launch",
     "pages/admin/admin"
   ],
   "window": {

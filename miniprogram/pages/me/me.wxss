@@ -119,6 +119,12 @@
   border-top: 1rpx solid #f3d0d4;
 }
 
+.action-row-strong {
+  background: #f9e7e3;
+  color: #a53128;
+  font-weight: 700;
+}
+
 .recent-empty {
   padding: 24rpx 0 8rpx;
 }

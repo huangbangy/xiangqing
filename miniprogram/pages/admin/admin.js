@@ -64,6 +64,12 @@ Page({
     });
   },
 
+  goLaunchGuide() {
+    wx.navigateTo({
+      url: '/pages/launch/launch'
+    });
+  },
+
   loadTab() {
     if (cloudService.isReady()) {
       if (this.data.tab === 'pending') {
