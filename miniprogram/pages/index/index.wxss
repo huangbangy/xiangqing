@@ -1,6 +1,20 @@
 .top-panel {
   margin-top: 4rpx;
-  background: #fffafa;
+  position: relative;
+  overflow: hidden;
+  background: #fffdfb;
+  border-color: rgba(145, 65, 54, 0.1);
+}
+
+.top-panel::after {
+  content: "喜";
+  position: absolute;
+  right: 20rpx;
+  top: 6rpx;
+  color: rgba(184, 58, 47, 0.05);
+  font-size: 196rpx;
+  line-height: 1;
+  font-family: KaiTi, STKaiti, serif;
 }
 
 .top-hero {
@@ -18,21 +32,21 @@
 
 .festival-mark-wrap {
   flex: 0 0 auto;
-  width: 124rpx;
-  height: 124rpx;
-  border-radius: 22rpx;
-  background: #fff1f2;
-  border: 1rpx solid #fecdd3;
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 8rpx;
+  background: #b83a2f;
+  border: 1rpx solid rgba(255, 255, 255, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10rpx 24rpx rgba(185, 28, 28, 0.08);
+  box-shadow: 0 14rpx 30rpx rgba(184, 58, 47, 0.2);
 }
 
 .festival-mark {
-  font-size: 92rpx;
+  font-size: 68rpx;
   line-height: 1;
-  color: #c63d2f;
+  color: #fff7ed;
   font-weight: 700;
   font-family: KaiTi, STKaiti, serif;
 }
@@ -43,9 +57,9 @@
 }
 
 .index-title {
-  font-size: 42rpx;
+  font-size: 40rpx;
   font-weight: 700;
-  color: #0f172a;
+  color: #241d1a;
   line-height: 1.2;
 }
 
@@ -63,24 +77,24 @@
   line-height: 46rpx;
   padding: 0 16rpx;
   border-radius: 23rpx;
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f5ebe6;
+  color: #6f332c;
   font-size: 22rpx;
 }
 
 .soft-chip-warm {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #f2ead9;
+  color: #7c5a16;
 }
 
 .soft-chip-mode {
-  background: #ffe4e6;
-  color: #9f1239;
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .festival-sub {
   margin-top: 10rpx;
-  color: #991b1b;
+  color: #6a5d56;
   font-size: 24rpx;
   line-height: 1.45;
 }
@@ -93,19 +107,20 @@
   margin-top: 22rpx;
   padding: 18rpx;
   border-radius: 8rpx;
-  background: #fff1f2;
+  background: #f9f1ed;
+  border: 1rpx solid rgba(145, 65, 54, 0.08);
 }
 
 .hero-stat-number {
   font-size: 42rpx;
   font-weight: 700;
-  color: #c63d2f;
+  color: #b83a2f;
   line-height: 1;
 }
 
 .hero-stat-copy {
   flex: 1;
-  color: #334155;
+  color: #51443f;
   font-size: 24rpx;
   line-height: 1.5;
   text-align: right;
@@ -152,8 +167,8 @@
   height: 38rpx;
   line-height: 38rpx;
   border-radius: 19rpx;
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f9e7e3;
+  color: #a53128;
   font-size: 20rpx;
 }
 
@@ -161,13 +176,13 @@
   display: block;
   font-size: 32rpx;
   font-weight: 600;
-  color: #0f172a;
+  color: #241d1a;
 }
 
 .profile-meta {
   display: block;
   margin-top: 4rpx;
-  color: #64748b;
+  color: #746862;
   font-size: 24rpx;
 }
 
@@ -177,11 +192,11 @@
 
 .profile-intro {
   margin-top: 10rpx;
-  color: #334155;
+  color: #51443f;
   line-height: 1.55;
   padding: 14rpx 16rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
+  background: #f9f1ed;
 }
 
 .tag-row {
@@ -213,32 +228,32 @@
   padding: 0 14rpx;
   border-radius: 21rpx;
   font-size: 22rpx;
-  background: #fff1f2;
-  color: #7f1d1d;
+  background: #f5ebe6;
+  color: #6f332c;
 }
 
 .trust-badge-primary {
-  background: #c63d2f;
+  background: #b83a2f;
   color: #ffffff;
 }
 
 .trust-badge-warm {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #f2ead9;
+  color: #7c5a16;
 }
 
 .trust-badge-soft {
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .tag-warm {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #f2ead9;
+  color: #7c5a16;
 }
 
 .recommend-panel {
-  background: #fffafa;
+  background: #fffdfb;
 }
 
 .recommend-head {
@@ -258,14 +273,14 @@
   line-height: 46rpx;
   padding: 0 16rpx;
   border-radius: 23rpx;
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f5ebe6;
+  color: #6f332c;
   font-size: 22rpx;
 }
 
 .recommend-tool-muted {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #f2ead9;
+  color: #7c5a16;
 }
 
 .recommend-count {
@@ -274,8 +289,8 @@
   line-height: 46rpx;
   padding: 0 16rpx;
   border-radius: 23rpx;
-  background: #ffe4e6;
-  color: #b5362b;
+  background: #f9e7e3;
+  color: #a53128;
   font-size: 22rpx;
 }
 
@@ -290,8 +305,8 @@
   margin-top: 18rpx;
   padding: 28rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
-  color: #7f1d1d;
+  background: #f9f1ed;
+  color: #6f332c;
   text-align: center;
   line-height: 1.6;
 }
@@ -303,8 +318,8 @@
 .recommend-card {
   padding: 18rpx;
   border-radius: 8rpx;
-  background: #ffffff;
-  border: 1rpx solid #f8cdd2;
+  background: #fffdfb;
+  border: 1rpx solid rgba(145, 65, 54, 0.12);
 }
 
 .avatar-recommend {
@@ -326,7 +341,7 @@
 .recommend-name {
   font-size: 30rpx;
   font-weight: 700;
-  color: #7f1d1d;
+  color: #33211d;
   margin-bottom: 4rpx;
 }
 
@@ -336,14 +351,14 @@
   line-height: 42rpx;
   padding: 0 14rpx;
   border-radius: 21rpx;
-  background: #c63d2f;
+  background: #b83a2f;
   color: #ffffff;
   font-size: 22rpx;
 }
 
 .recommend-reason {
   margin-top: 12rpx;
-  color: #7f1d1d;
+  color: #6f332c;
   font-size: 24rpx;
   line-height: 1.45;
 }

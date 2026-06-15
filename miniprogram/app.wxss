@@ -1,8 +1,5 @@
 page {
-  background-color: #fff6f3;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23fff6f3'/%3E%3Ctext x='90' y='108' text-anchor='middle' fill='%23c63d2f' fill-opacity='.065' font-size='66' font-family='KaiTi,STKaiti,serif'%3E%E5%96%9C%3C/text%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 180rpx 180rpx;
+  background-color: #f8f3ef;
   color: #1f2937;
   font-size: 28rpx;
 }
@@ -15,10 +12,7 @@ button::after {
   min-height: 100vh;
   box-sizing: border-box;
   padding: 24rpx;
-  background-color: #fff6f3;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23fff6f3'/%3E%3Ctext x='90' y='108' text-anchor='middle' fill='%23c63d2f' fill-opacity='.065' font-size='66' font-family='KaiTi,STKaiti,serif'%3E%E5%96%9C%3C/text%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 180rpx 180rpx;
+  background-color: #f8f3ef;
 }
 
 .section {
@@ -26,12 +20,12 @@ button::after {
 }
 
 .card {
-  background: #ffffff;
-  border: 1rpx solid #f3d0d4;
+  background: #fffdfb;
+  border: 1rpx solid rgba(145, 65, 54, 0.1);
   border-radius: 8rpx;
   padding: 24rpx;
   box-sizing: border-box;
-  box-shadow: 0 8rpx 24rpx rgba(185, 28, 28, 0.06);
+  box-shadow: 0 12rpx 32rpx rgba(72, 42, 36, 0.07);
 }
 
 .card + .card {
@@ -41,17 +35,17 @@ button::after {
 .section-title {
   font-size: 30rpx;
   font-weight: 600;
-  color: #7f1d1d;
+  color: #33211d;
   margin-bottom: 16rpx;
 }
 
 .subtle {
-  color: #64748b;
+  color: #746862;
   font-size: 24rpx;
 }
 
 .muted {
-  color: #94a3b8;
+  color: #9a8f88;
 }
 
 .row {
@@ -96,7 +90,7 @@ button::after {
 
 .divider {
   height: 1rpx;
-  background: #f3d0d4;
+  background: rgba(145, 65, 54, 0.12);
   margin: 20rpx 0;
 }
 
@@ -110,18 +104,18 @@ button::after {
 }
 
 .btn-primary {
-  background: #c63d2f;
+  background: #b83a2f;
   color: #ffffff;
 }
 
 .btn-ghost {
-  background: #fff1f2;
-  color: #7f1d1d;
+  background: #f4e8e3;
+  color: #6f332c;
 }
 
 .btn-danger {
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .btn-small {
@@ -135,9 +129,9 @@ button::after {
 .textarea {
   width: 100%;
   box-sizing: border-box;
-  border: 1rpx solid #f1c3c8;
+  border: 1rpx solid rgba(145, 65, 54, 0.16);
   border-radius: 8rpx;
-  background: #ffffff;
+  background: #fffdfb;
   padding: 18rpx 20rpx;
   font-size: 28rpx;
 }
@@ -148,7 +142,7 @@ button::after {
 
 .label {
   font-size: 24rpx;
-  color: #475569;
+  color: #6a5d56;
   margin-bottom: 10rpx;
 }
 
@@ -160,14 +154,14 @@ button::after {
   height: 48rpx;
   line-height: 48rpx;
   border-radius: 24rpx;
-  background: #fff1f2;
-  color: #7f1d1d;
+  background: #f4e8e3;
+  color: #6f332c;
   font-size: 22rpx;
 }
 
 .chip-active {
-  background: #ffe4e6;
-  color: #b5362b;
+  background: #b83a2f;
+  color: #ffffff;
 }
 
 .tag {
@@ -177,14 +171,14 @@ button::after {
   height: 42rpx;
   line-height: 42rpx;
   border-radius: 21rpx;
-  background: #fff4f5;
-  color: #7f1d1d;
+  background: #f5ebe6;
+  color: #6f332c;
   font-size: 22rpx;
 }
 
 .tag-soft {
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .empty {
@@ -199,11 +193,11 @@ button::after {
   height: 96rpx;
   border-radius: 50%;
   overflow: hidden;
-  background: #ffe4e6;
+  background: #f4e8e3;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #7f1d1d;
+  color: #7c382f;
   font-size: 30rpx;
   font-weight: 600;
 }
@@ -225,7 +219,7 @@ button::after {
 
 .segmented {
   display: flex;
-  background: #fee2e2;
+  background: #efe1db;
   border-radius: 8rpx;
   overflow: hidden;
 }
@@ -235,12 +229,12 @@ button::after {
   text-align: center;
   padding: 18rpx 12rpx;
   font-size: 26rpx;
-  color: #7f1d1d;
-  background: #fee2e2;
+  color: #6f332c;
+  background: #efe1db;
 }
 
 .segmented-item-active {
-  background: #c63d2f;
+  background: #b83a2f;
   color: #ffffff;
 }
 
@@ -249,13 +243,13 @@ button::after {
   height: 14rpx;
   border-radius: 999rpx;
   overflow: hidden;
-  background: #fde2e4;
+  background: #eadbd5;
 }
 
 .progress-fill {
   height: 100%;
   border-radius: 999rpx;
-  background: #c63d2f;
+  background: #b83a2f;
 }
 
 .form-grid {

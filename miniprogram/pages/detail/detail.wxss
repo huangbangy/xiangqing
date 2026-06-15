@@ -10,7 +10,7 @@
 .profile-name {
   font-size: 36rpx;
   font-weight: 700;
-  color: #0f172a;
+  color: #241d1a;
   margin-bottom: 8rpx;
 }
 
@@ -46,8 +46,8 @@
   min-height: 64rpx;
   padding: 0 16rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
-  color: #7f1d1d;
+  background: #f9f1ed;
+  color: #6f332c;
   font-size: 24rpx;
   box-sizing: border-box;
 }
@@ -56,26 +56,26 @@
   width: 12rpx;
   height: 12rpx;
   border-radius: 50%;
-  background: #c63d2f;
+  background: #b83a2f;
 }
 
 .trust-item-primary {
-  background: #fff1f2;
-  color: #991b1b;
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .trust-item-warm {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #f2ead9;
+  color: #7c5a16;
 }
 
 .trust-item-soft {
-  background: #fffafa;
-  color: #7f1d1d;
+  background: #f5ebe6;
+  color: #6f332c;
 }
 
 .paragraph {
-  color: #334155;
+  color: #51443f;
   line-height: 1.7;
 }
 
@@ -88,19 +88,19 @@
 .intro-item {
   padding: 18rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
-  border-left: 6rpx solid #c63d2f;
+  background: #f9f1ed;
+  border-left: 6rpx solid #b83a2f;
 }
 
 .intro-label {
-  color: #c63d2f;
+  color: #a53128;
   font-size: 22rpx;
   font-weight: 600;
   margin-bottom: 8rpx;
 }
 
 .intro-text {
-  color: #1f2937;
+  color: #33211d;
   line-height: 1.6;
 }
 
@@ -112,13 +112,13 @@
 }
 
 .tag-warm {
-  background: #fff7ed;
-  color: #c2410c;
+  background: #f2ead9;
+  color: #7c5a16;
 }
 
 .tag-mode {
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .match-card-grid {
@@ -131,19 +131,19 @@
   min-height: 96rpx;
   padding: 16rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
-  border: 1rpx solid #f7d8d1;
+  background: #f9f1ed;
+  border: 1rpx solid rgba(145, 65, 54, 0.12);
   box-sizing: border-box;
 }
 
 .match-answer-label {
-  color: #b5362b;
+  color: #a53128;
   font-size: 22rpx;
   margin-bottom: 8rpx;
 }
 
 .match-answer-value {
-  color: #1f2937;
+  color: #33211d;
   font-size: 28rpx;
   font-weight: 600;
 }
@@ -167,16 +167,16 @@
 .locked-contact {
   padding: 24rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
-  color: #7f1d1d;
+  background: #f9f1ed;
+  color: #6f332c;
   line-height: 1.6;
 }
 
 .chat-ready {
   padding: 22rpx;
   border-radius: 8rpx;
-  background: #fff7f7;
-  color: #7f1d1d;
+  background: #f9f1ed;
+  color: #6f332c;
   line-height: 1.6;
 }
 
@@ -192,8 +192,8 @@
   line-height: 52rpx;
   padding: 0 18rpx;
   border-radius: 26rpx;
-  background: #fff1f2;
-  color: #b5362b;
+  background: #f5ebe6;
+  color: #6f332c;
   font-size: 24rpx;
 }
 
