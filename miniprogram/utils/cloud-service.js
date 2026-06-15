@@ -40,19 +40,7 @@ function buildCloudPath(localPath, folder) {
   return `xiangqin/${safeFolderName(folder)}/${day}/${Date.now()}_${random}.${fileExtension(localPath)}`;
 }
 
-function uploadImage(localPath, folder) {
-  if (!localPath) {
-    return Promise.reject(new Error('请选择图片'));
-  }
-  if (isStoredFilePath(localPath)) {
-    return Promise.resolve({
-      fileID: localPath,
-      cloudPath: ''
-    });
-  }
-  if (!canUploadFile()) {
-    return Promise.reject(new Error('云存储未就绪'));
-  }
+function uploadToCloud(localPath, folder) {
   const cloudPath = buildCloudPath(localPath, folder);
   return new Promise((resolve, reject) => {
     wx.cloud.uploadFile({
@@ -73,6 +61,35 @@ function uploadImage(localPath, folder) {
       }
     });
   });
+}
+
+function auditImage(fileID, scene) {
+  return callApi('auditImage', {
+    fileID,
+    scene: scene || 'profile_image'
+  });
+}
+
+function uploadImage(localPath, folder) {
+  if (!localPath) {
+    return Promise.reject(new Error('请选择图片'));
+  }
+  if (isStoredFilePath(localPath)) {
+    return Promise.resolve({
+      fileID: localPath,
+      cloudPath: ''
+    });
+  }
+  if (!canUploadFile()) {
+    return Promise.reject(new Error('云存储未就绪'));
+  }
+  return uploadToCloud(localPath, folder).then((uploaded) =>
+    auditImage(uploaded.fileID, folder).then((auditResult) =>
+      Object.assign({}, uploaded, {
+        audit: (auditResult && auditResult.data) || {}
+      })
+    )
+  );
 }
 
 function uploadImages(paths, folder) {
@@ -337,6 +354,10 @@ function createContactRequest(payload) {
   return callApi('createContactRequest', payload || {});
 }
 
+function createReport(payload) {
+  return callApi('createReport', payload || {});
+}
+
 function getContactRequests(scope) {
   return callApi('getContactRequests', {
     scope
@@ -415,6 +436,7 @@ module.exports = {
   isReady,
   canUploadFile,
   isStoredFilePath,
+  auditImage,
   uploadImage,
   uploadImages,
   callApi,
@@ -425,6 +447,7 @@ module.exports = {
   submitMyProfile,
   toggleFavorite,
   createContactRequest,
+  createReport,
   getContactRequests,
   respondContactRequest,
   getConversations,

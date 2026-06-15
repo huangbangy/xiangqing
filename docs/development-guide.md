@@ -2,21 +2,24 @@
 
 ## 1. 当前技术方案
 
-当前采用微信小程序原生开发方式，不依赖 npm、Node、脚手架或构建工具。
+当前采用微信小程序原生开发方式，后端使用微信云开发。
 
 这样做的原因：
 
 - 初期最容易导入微信开发者工具
 - 不需要先安装复杂环境
 - 页面结构和小程序审核形态更接近真实上线版本
+- 云函数可以集中处理资料、聊天、联系方式、审核等敏感写操作
 
 ## 2. 项目入口
 
 - `project.config.json`：微信开发者工具导入配置
 - `miniprogram/app.json`：页面路由配置
 - `miniprogram/app.wxss`：全局样式
-- `miniprogram/utils/service.js`：当前本地数据服务
-- `miniprogram/utils/mock-data.js`：演示数据
+- `miniprogram/utils/cloud-service.js`：云函数和云存储封装
+- `miniprogram/utils/service.js`：本地 mock 兜底数据服务
+- `cloudfunctions/xiangqinApi`：核心业务云函数
+- `cloudfunctions/cloudPing`：云开发自检云函数
 
 ## 3. 页面说明
 
@@ -25,50 +28,71 @@
 | 首页 | `pages/index/index` | 公开资料列表、搜索、收藏、联系 |
 | 筛选 | `pages/filter/filter` | 性别、年龄、地区、学历、婚姻状态筛选 |
 | 详情 | `pages/detail/detail` | 完整个人资料、三句话认识我、收藏、联系、举报、受保护联系方式、发布身份 |
-| 编辑资料 | `pages/edit/edit` | 用户资料填写、三句话认识我、标签、相册、联系方式、提交审核 |
+| 编辑资料 | `pages/edit/edit` | 用户资料填写、三句话认识我、标签、头像/相册上传审核、联系方式、提交审核 |
 | 我的 | `pages/me/me` | 资料状态、收藏、联系申请、管理入口 |
 | 收藏 | `pages/favorites/favorites` | 已收藏用户 |
 | 联系申请 | `pages/requests/requests` | 收到和发出的联系申请 |
 | 举报 | `pages/report/report` | 提交举报 |
+| 协议 | `pages/legal/legal` | 用户协议、隐私政策 |
 | 管理后台 | `pages/admin/admin` | 审核资料、处理举报、封禁用户 |
 
-## 4. 本地演示模式
+## 4. 云开发模式
 
-当前数据保存在小程序本地缓存里，适合演示流程。
+当前 `miniprogram/utils/config.js` 已开启 `useCloud`，优先使用云函数 `xiangqinApi` 读写真实数据库。
+
+已接入：
+
+- 资料列表、详情、我的资料
+- 收藏、联系申请、会话、聊天消息
+- 管理后台资料审核、举报处理、封禁用户
+- 云存储头像和相册
+- 图片内容安全审核
+- 资料、联系申请、聊天、举报的文字内容安全审核
+- 举报提交写入云端 `reports`
+- 用户协议和隐私政策入口
+- 提交审核前协议确认
+
+## 5. 本地演示模式
+
+项目仍保留本地 mock 兜底，适合云函数临时不可用时继续预览界面。
 
 注意：
 
+- 本地 mock 数据只保存在小程序本地缓存里
 - 不同手机之间数据不会互通
 - 清理缓存后数据会恢复为种子数据
-- 相册图片目前保存的是本地临时路径
 - 微信号和手机号只在联系申请同意后展示
 - 家长代看只面向成年子女，正式上线时要补本人授权确认
 - 管理员口令是 `123456`
 
-## 5. 正式上线必须替换
+## 6. 正式上线前必须检查
 
-上线前需要把下面几项接成真实服务：
+上线前重点不是大改功能，而是检查配置和合规：
 
-- 微信登录 openid
-- 用户资料数据库
-- 图片上传与审核
+- 云函数 `xiangqinApi` 已重新部署
+- 云数据库集合和云存储权限规则符合预期
+- 图片内容安全审核可用
+- 文字内容安全审核可用
+- 用户协议和隐私政策入口可用
+- 资料审核、举报、封禁流程在真机正常
 - 联系申请通知
 - 举报处理记录
 - 管理员账号权限
 - 操作日志
 - 数据备份
+- 用户协议和隐私协议
 
-## 6. 推荐上线技术路线
+## 7. 推荐上线技术路线
 
-最省事路线：
+当前已选择最省事路线：
 
 1. 使用微信云开发
-2. 建立 `users`、`profiles`、`favorites`、`contact_requests`、`reports`、`review_logs` 集合
+2. 建立 `users`、`profiles`、`favorites`、`contactRequests`、`conversations`、`messages`、`reports`、`reviewLogs` 集合
 3. 把 `utils/service.js` 从本地缓存改成云函数调用
 4. 图片使用云存储
 5. 管理员权限存到 `users.role`
 
-更灵活路线：
+后续如果业务做大，可以再考虑更灵活路线：
 
 1. 使用独立后端
 2. 后端提供 `docs/api-spec.md` 里的接口

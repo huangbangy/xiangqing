@@ -106,6 +106,18 @@
 - 头像：`profiles.avatarUrl`
 - 相册：`profiles.photos`
 
+上传后会调用云函数动作：
+
+```json
+{
+  "action": "auditImage",
+  "fileID": "cloud://xxx",
+  "scene": "avatars"
+}
+```
+
+审核通过后才把图片写入资料；审核不通过时提示用户更换图片。
+
 ### `DELETE /photos/{id}`
 
 删除照片。当前最简版先从资料字段移除图片引用，云存储文件清理可以在后续管理后台里补充。
@@ -242,11 +254,28 @@
 }
 ```
 
+发送前会调用微信文字内容安全审核；审核不通过时不会写入 `messages`。
+
 ## 7. 举报
 
 ### `POST /reports`
 
 提交举报。
+
+云函数动作：
+
+```json
+{
+  "action": "createReport",
+  "targetUserId": "u_1002",
+  "profileId": "p_1002",
+  "category": "资料造假",
+  "reason": "说明具体问题",
+  "evidenceUrls": ["cloud://xxx"]
+}
+```
+
+举报说明会先做微信文字内容安全审核；证据图片在上传时会做图片内容安全审核。
 
 ## 8. 管理后台
 

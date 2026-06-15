@@ -176,7 +176,7 @@
     <view class="row-between">
       <view>
         <view class="section-title">相册</view>
-        <view class="subtle">最多 6 张，已接入云存储；提交审核前建议放清晰生活照。</view>
+        <view class="subtle">最多 6 张，已接入云存储和内容审核；建议放清晰生活照。</view>
       </view>
       <button class="btn btn-ghost btn-small" loading="{{uploading}}" disabled="{{uploading}}" bindtap="choosePhotos">添加</button>
     </view>
@@ -186,6 +186,19 @@
         <image src="{{item}}" mode="aspectFill" bindtap="previewPhoto" data-index="{{index}}" />
         <button class="photo-remove" catchtap="removePhoto" data-index="{{index}}">删除</button>
       </view>
+    </view>
+  </view>
+
+  <view class="section card legal-card">
+    <checkbox-group bindchange="onLegalChange">
+      <label class="legal-check">
+        <checkbox value="accepted" checked="{{acceptedLegal}}" color="#c63d2f" />
+        <text>我已阅读并同意</text>
+      </label>
+    </checkbox-group>
+    <view class="legal-links">
+      <button class="legal-link" catchtap="goLegal" data-type="terms">《用户协议》</button>
+      <button class="legal-link" catchtap="goLegal" data-type="privacy">《隐私政策》</button>
     </view>
   </view>
 

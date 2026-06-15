@@ -12,6 +12,15 @@
   margin-top: 16rpx;
 }
 
+.upload-bar {
+  margin-top: 16rpx;
+  padding: 14rpx 18rpx;
+  border-radius: 8rpx;
+  background: #fff1f2;
+  color: #b5362b;
+  font-size: 24rpx;
+}
+
 .evidence-item {
   position: relative;
   aspect-ratio: 1 / 1;

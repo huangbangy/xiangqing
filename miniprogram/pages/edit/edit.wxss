@@ -85,6 +85,38 @@
   font-size: 22rpx;
 }
 
+.legal-card {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10rpx;
+}
+
+.legal-check {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #475569;
+  font-size: 24rpx;
+}
+
+.legal-links {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.legal-link {
+  display: inline-flex;
+  width: auto;
+  height: auto;
+  line-height: 1.4;
+  padding: 0;
+  background: transparent;
+  color: #b5362b;
+  font-size: 24rpx;
+}
+
 .bottom-actions {
   position: sticky;
   bottom: 24rpx;

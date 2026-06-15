@@ -1,0 +1,18 @@
+<view class="page safe-bottom">
+  <view class="section card legal-hero">
+    <view class="legal-mark">喜</view>
+    <view>
+      <view class="legal-title">{{doc.title}}</view>
+      <view class="subtle">更新日期：{{doc.updatedAt}}</view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="legal-intro">{{doc.intro}}</view>
+  </view>
+
+  <view wx:for="{{doc.sections}}" wx:key="title" class="section card legal-section">
+    <view class="section-title">{{item.title}}</view>
+    <view wx:for="{{item.items}}" wx:for-item="line" wx:key="*this" class="legal-line">{{line}}</view>
+  </view>
+</view>

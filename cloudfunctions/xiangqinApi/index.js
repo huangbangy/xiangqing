@@ -19,6 +19,8 @@ const collectionNames = [
 ];
 
 const adminCode = '123456';
+const maxAuditImageSize = 1024 * 1024;
+const maxAuditTextLength = 2000;
 
 function cloudUserId(openid) {
   const safeOpenid = String(openid || '').replace(/[^a-zA-Z0-9_-]/g, '');
@@ -49,6 +51,122 @@ function id(prefix) {
 
 function now() {
   return new Date().toISOString();
+}
+
+function isCloudFileID(value) {
+  return String(value || '').indexOf('cloud://') === 0;
+}
+
+function contentTypeForFile(fileID) {
+  const cleanPath = String(fileID || '').split('?')[0].split('#')[0].toLowerCase();
+  if (cleanPath.indexOf('.png') >= 0) {
+    return 'image/png';
+  }
+  if (cleanPath.indexOf('.webp') >= 0) {
+    return 'image/webp';
+  }
+  if (cleanPath.indexOf('.gif') >= 0) {
+    return 'image/gif';
+  }
+  return 'image/jpeg';
+}
+
+function auditCode(result) {
+  if (!result) {
+    return -1;
+  }
+  if (result.errCode !== undefined) {
+    return Number(result.errCode);
+  }
+  if (result.errcode !== undefined) {
+    return Number(result.errcode);
+  }
+  return 0;
+}
+
+function auditFailMessage(err) {
+  const code = Number((err && (err.errCode || err.errcode || err.code)) || 0);
+  if (code === 87014) {
+    return '图片可能包含违规内容，请更换后再上传';
+  }
+  return (err && (err.errMsg || err.message)) || '图片内容安全检测失败';
+}
+
+function textAuditFailMessage(err, label) {
+  const code = Number((err && (err.errCode || err.errcode || err.code)) || 0);
+  if (code === 87014) {
+    return `${label || '内容'}可能包含违规信息，请修改后再提交`;
+  }
+  return (err && (err.errMsg || err.message)) || `${label || '内容'}安全检测失败`;
+}
+
+function auditTextScene(scene) {
+  if (scene === 'profile') {
+    return 1;
+  }
+  if (scene === 'chat' || scene === 'request' || scene === 'report') {
+    return 2;
+  }
+  return 1;
+}
+
+function auditTextPassed(result) {
+  if (auditCode(result) !== 0) {
+    return false;
+  }
+  const checkResult = (result && result.result) || {};
+  const suggest = String(checkResult.suggest || result.suggest || 'pass');
+  return !suggest || suggest === 'pass';
+}
+
+function splitAuditText(content) {
+  const text = String(content || '').trim();
+  const chunks = [];
+  if (!text) {
+    return chunks;
+  }
+  for (let i = 0; i < text.length; i += maxAuditTextLength) {
+    chunks.push(text.slice(i, i + maxAuditTextLength));
+  }
+  return chunks;
+}
+
+async function auditTextContent(content, wxContext, scene, label) {
+  const chunks = splitAuditText(content);
+  if (!chunks.length) {
+    return { ok: true };
+  }
+  if (!cloud.openapi || !cloud.openapi.security || !cloud.openapi.security.msgSecCheck) {
+    return { ok: false, message: '当前云函数未开通文字内容安全接口' };
+  }
+  for (let i = 0; i < chunks.length; i += 1) {
+    try {
+      const result = await cloud.openapi.security.msgSecCheck({
+        content: chunks[i],
+        version: 2,
+        scene: auditTextScene(scene),
+        openid: wxContext.OPENID
+      });
+      if (!auditTextPassed(result)) {
+        return { ok: false, message: textAuditFailMessage(result, label) };
+      }
+    } catch (err) {
+      return { ok: false, message: textAuditFailMessage(err, label) };
+    }
+  }
+  return { ok: true };
+}
+
+async function auditTextItems(items, wxContext, scene) {
+  const list = Array.isArray(items) ? items : [];
+  for (let i = 0; i < list.length; i += 1) {
+    const item = list[i] || {};
+    const result = await auditTextContent(item.content, wxContext, scene, item.label);
+    if (!result.ok) {
+      return result;
+    }
+  }
+  return { ok: true };
 }
 
 function isCollectionExistsError(err) {
@@ -247,6 +365,31 @@ function normalizeProfileInput(payload) {
     next.avatarText = String(next.nickname).slice(0, 1);
   }
   return next;
+}
+
+function profileAuditItems(profile) {
+  const source = profile || {};
+  const fields = [
+    { key: 'nickname', label: '昵称' },
+    { key: 'occupation', label: '职业' },
+    { key: 'wechatId', label: '微信号' },
+    { key: 'contactNote', label: '联系备注' },
+    { key: 'parentName', label: '家长姓名' },
+    { key: 'parentRelation', label: '家长关系' },
+    { key: 'parentWechatId', label: '家长微信号' },
+    { key: 'parentContactNote', label: '家长联系备注' },
+    { key: 'lifeRhythm', label: '生活节奏' },
+    { key: 'relationshipView', label: '关系期待' },
+    { key: 'weekendPlan', label: '周末安排' },
+    { key: 'bio', label: '自我介绍' },
+    { key: 'expectation', label: '择偶要求' }
+  ];
+  return fields
+    .map((field) => ({
+      label: field.label,
+      content: source[field.key]
+    }))
+    .filter((item) => String(item.content || '').trim());
 }
 
 function validateProfile(profile) {
@@ -738,6 +881,10 @@ async function saveMyProfile(event, wxContext) {
   const user = await ensureCurrentUser(wxContext);
   const existing = await ensureMyProfile(wxContext);
   const input = normalizeProfileInput(event.profile || event.payload || {});
+  const auditResult = await auditTextItems(profileAuditItems(input), wxContext, 'profile');
+  if (!auditResult.ok) {
+    return auditResult;
+  }
   const timestamp = now();
   const profile = Object.assign({}, stripDbId(existing), input, {
     id: existing.id || `p_${user.id}`,
@@ -763,7 +910,10 @@ async function saveMyProfile(event, wxContext) {
 }
 
 async function submitMyProfile(event, wxContext) {
-  await saveMyProfile(event, wxContext);
+  const saveResult = await saveMyProfile(event, wxContext);
+  if (!saveResult.ok) {
+    return saveResult;
+  }
   const profile = await ensureMyProfile(wxContext);
   const missing = validateProfile(profile);
   if (missing.length) {
@@ -800,6 +950,74 @@ async function submitMyProfile(event, wxContext) {
     action: 'submitMyProfile',
     data: await sanitizeProfileForUser(nextProfile, wxContext, 'self')
   };
+}
+
+async function auditImage(event, wxContext) {
+  await ensureCurrentUser(wxContext);
+  const fileID = String(event.fileID || event.fileId || '').trim();
+  if (!fileID) {
+    return { ok: false, message: '缺少图片文件' };
+  }
+  if (!isCloudFileID(fileID)) {
+    return { ok: false, message: '请先上传到云存储后再审核' };
+  }
+  if (!cloud.openapi || !cloud.openapi.security || !cloud.openapi.security.imgSecCheck) {
+    return { ok: false, message: '当前云函数未开通图片内容安全接口' };
+  }
+
+  let fileContent;
+  try {
+    const downloadResult = await cloud.downloadFile({ fileID });
+    fileContent = downloadResult && downloadResult.fileContent;
+  } catch (err) {
+    return { ok: false, message: '读取云存储图片失败' };
+  }
+
+  if (!fileContent || !fileContent.length) {
+    return { ok: false, message: '图片文件为空' };
+  }
+  if (fileContent.length > maxAuditImageSize) {
+    return { ok: false, message: '图片过大，请换一张压缩后的图片' };
+  }
+
+  try {
+    const result = await cloud.openapi.security.imgSecCheck({
+      media: {
+        contentType: contentTypeForFile(fileID),
+        value: fileContent
+      }
+    });
+    const code = auditCode(result);
+    if (code === 0) {
+      return {
+        ok: true,
+        action: 'auditImage',
+        message: '图片审核通过',
+        data: {
+          fileID,
+          scene: event.scene || '',
+          passed: true
+        }
+      };
+    }
+    if (code === 87014) {
+      try {
+        await cloud.deleteFile({ fileList: [fileID] });
+      } catch (deleteErr) {
+        console.warn('delete unsafe image failed', deleteErr);
+      }
+    }
+    return { ok: false, message: auditFailMessage(result) };
+  } catch (err) {
+    if (Number(err && (err.errCode || err.errcode || err.code)) === 87014) {
+      try {
+        await cloud.deleteFile({ fileList: [fileID] });
+      } catch (deleteErr) {
+        console.warn('delete unsafe image failed', deleteErr);
+      }
+    }
+    return { ok: false, message: auditFailMessage(err) };
+  }
 }
 
 async function toggleFavorite(event, wxContext) {
@@ -852,12 +1070,17 @@ async function createContactRequest(event, wxContext) {
   if (existing && existing.status === 'pending') {
     return { ok: false, message: channel === 'parent' ? '已经发起过家长沟通申请' : '已经发起过联系申请' };
   }
+  const requestMessage = String(event.message || '').trim();
+  const auditResult = await auditTextContent(requestMessage, wxContext, 'request', '联系申请留言');
+  if (!auditResult.ok) {
+    return auditResult;
+  }
   const timestamp = now();
   const request = {
     id: id('req'),
     fromUserId: currentUserId,
     toUserId: profile.userId,
-    message: String(event.message || '').trim(),
+    message: requestMessage,
     channel,
     fromMode: viewerMode,
     toPublisherType: profile.publisherType || 'self',
@@ -869,6 +1092,52 @@ async function createContactRequest(event, wxContext) {
     data: request
   });
   return { ok: true, message: channel === 'parent' ? '家长沟通申请已发送' : '联系申请已发送', data: request };
+}
+
+async function createReport(event, wxContext) {
+  const currentUserId = cloudUserId(wxContext.OPENID);
+  await ensureCurrentUser(wxContext);
+  const profile = await profileByIdOrUserId(event.targetUserId || event.profileId || event.userId);
+  if (!profile) {
+    return { ok: false, message: '举报对象不存在' };
+  }
+  if (profile.userId === currentUserId) {
+    return { ok: false, message: '不能举报自己' };
+  }
+  const category = String(event.category || '其他违规').trim();
+  const reason = String(event.reason || '').trim();
+  if (!reason) {
+    return { ok: false, message: '请填写举报说明' };
+  }
+  const auditResult = await auditTextItems(
+    [
+      { label: '举报类型', content: category },
+      { label: '举报说明', content: reason }
+    ],
+    wxContext,
+    'report'
+  );
+  if (!auditResult.ok) {
+    return auditResult;
+  }
+  const evidenceUrls = Array.isArray(event.evidenceUrls) ? event.evidenceUrls.filter(Boolean).slice(0, 3) : [];
+  const timestamp = now();
+  const report = {
+    id: id('report'),
+    reporterId: currentUserId,
+    targetUserId: profile.userId,
+    category,
+    reason,
+    evidenceUrls,
+    status: 'pending',
+    handlerId: '',
+    createdAt: timestamp,
+    updatedAt: timestamp
+  };
+  await db.collection('reports').doc(report.id).set({
+    data: report
+  });
+  return { ok: true, message: '举报已提交', action: 'createReport', data: report };
 }
 
 async function getContactRequests(event, wxContext) {
@@ -1032,6 +1301,10 @@ async function sendMessage(event, wxContext) {
   const text = String(event.text || '').trim();
   if (!text) {
     return { ok: false, message: '先写一点内容' };
+  }
+  const auditResult = await auditTextContent(text, wxContext, 'chat', '聊天消息');
+  if (!auditResult.ok) {
+    return auditResult;
   }
   const conversation = await getDoc('conversations', conversationId);
   if (!conversation || !Array.isArray(conversation.memberIds) || conversation.memberIds.indexOf(currentUserId) < 0) {
@@ -1330,11 +1603,17 @@ exports.main = async (event = {}) => {
     if (action === 'submitMyProfile') {
       return await submitMyProfile(event, wxContext);
     }
+    if (action === 'auditImage') {
+      return await auditImage(event, wxContext);
+    }
     if (action === 'toggleFavorite') {
       return await toggleFavorite(event, wxContext);
     }
     if (action === 'createContactRequest') {
       return await createContactRequest(event, wxContext);
+    }
+    if (action === 'createReport') {
+      return await createReport(event, wxContext);
     }
     if (action === 'getContactRequests') {
       return await getContactRequests(event, wxContext);

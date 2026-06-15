@@ -34,10 +34,11 @@
       <view class="row-between">
         <view>
           <view class="label">证据图片</view>
-          <view class="subtle">最多 3 张，可选</view>
+          <view class="subtle">最多 3 张，可选；云端会做图片内容审核。</view>
         </view>
-        <button class="btn btn-ghost btn-small" bindtap="chooseEvidence">添加</button>
+        <button class="btn btn-ghost btn-small" loading="{{uploading}}" disabled="{{uploading}}" bindtap="chooseEvidence">添加</button>
       </view>
+      <view wx:if="{{uploading}}" class="upload-bar">{{uploadingText}}</view>
       <view wx:if="{{evidenceUrls.length}}" class="evidence-grid">
         <view wx:for="{{evidenceUrls}}" wx:key="*this" class="evidence-item">
           <image src="{{item}}" mode="aspectFill" />
@@ -47,6 +48,5 @@
     </view>
   </view>
 
-  <button class="btn btn-danger" bindtap="submit">提交举报</button>
+  <button class="btn btn-danger" disabled="{{uploading}}" bindtap="submit">提交举报</button>
 </view>
-

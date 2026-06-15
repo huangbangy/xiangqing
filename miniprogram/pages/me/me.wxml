@@ -104,6 +104,17 @@
     </button>
   </view>
 
+  <view class="section card action-list">
+    <button class="action-row" bindtap="goLegal" data-type="terms">
+      <text>用户协议</text>
+      <text class="subtle">服务规则</text>
+    </button>
+    <button class="action-row" bindtap="goLegal" data-type="privacy">
+      <text>隐私政策</text>
+      <text class="subtle">信息保护</text>
+    </button>
+  </view>
+
   <view class="section card stack-12">
     <view class="section-title">管理入口</view>
     <view class="subtle">MVP 阶段先用本地口令进入，正式上线会改成管理员账号权限。</view>

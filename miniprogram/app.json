@@ -10,6 +10,7 @@
     "pages/messages/messages",
     "pages/chat/chat",
     "pages/report/report",
+    "pages/legal/legal",
     "pages/admin/admin"
   ],
   "window": {

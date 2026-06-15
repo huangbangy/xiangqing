@@ -103,6 +103,7 @@ Page({
     statusText: '草稿',
     uploading: false,
     uploadingText: '',
+    acceptedLegal: false,
     genderOptions: ['男', '女'],
     hometownOptions: cityOptions,
     currentCityOptions: cityOptions,
@@ -125,6 +126,9 @@ Page({
   },
 
   onLoad() {
+    this.setData({
+      acceptedLegal: !!wx.getStorageSync('acceptedLegal')
+    });
     this.loadProfile();
   },
 
@@ -240,7 +244,7 @@ Page({
   },
 
   uploadAvatar(localPath) {
-    this.setUploading('头像上传中');
+    this.setUploading('头像上传审核中');
     cloudService
       .uploadImage(localPath, 'avatars')
       .then((result) => {
@@ -250,7 +254,7 @@ Page({
           'form.avatarText': ''
         });
         wx.showToast({
-          title: '头像已上传',
+          title: '头像审核通过',
           icon: 'success'
         });
       })
@@ -301,7 +305,7 @@ Page({
   },
 
   uploadPhotos(localPaths, existingPhotos) {
-    this.setUploading('相册上传中');
+    this.setUploading('相册上传审核中');
     cloudService
       .uploadImages(localPaths, 'photos')
       .then((fileIDs) => {
@@ -310,7 +314,7 @@ Page({
           'form.photos': (existingPhotos || []).concat(fileIDs).slice(0, 6)
         });
         wx.showToast({
-          title: `已上传 ${fileIDs.length} 张`,
+          title: `已通过 ${fileIDs.length} 张`,
           icon: 'success'
         });
       })
@@ -378,6 +382,21 @@ Page({
     });
   },
 
+  onLegalChange(event) {
+    const checked = event.detail.value.indexOf('accepted') >= 0;
+    this.setData({
+      acceptedLegal: checked
+    });
+    wx.setStorageSync('acceptedLegal', checked);
+  },
+
+  goLegal(event) {
+    const type = event.currentTarget.dataset.type || 'terms';
+    wx.navigateTo({
+      url: `/pages/legal/legal?type=${type}`
+    });
+  },
+
   saveDraft() {
     if (!this.ensureCanSave()) {
       return;
@@ -410,6 +429,13 @@ Page({
 
   submitReview() {
     if (!this.ensureCanSave()) {
+      return;
+    }
+    if (!this.data.acceptedLegal) {
+      wx.showToast({
+        title: '请先同意协议',
+        icon: 'none'
+      });
       return;
     }
     if (cloudService.isReady()) {

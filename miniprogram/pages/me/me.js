@@ -168,6 +168,13 @@ Page({
     });
   },
 
+  goLegal(event) {
+    const type = event.currentTarget.dataset.type || 'terms';
+    wx.navigateTo({
+      url: `/pages/legal/legal?type=${type}`
+    });
+  },
+
   onAdminCodeInput(event) {
     this.setData({
       adminCode: event.detail.value
