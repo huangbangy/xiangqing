@@ -80,6 +80,33 @@
   color: #b5362b;
 }
 
+.match-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12rpx;
+}
+
+.match-answer-card {
+  min-height: 96rpx;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  background: #fff7f7;
+  border: 1rpx solid #f7d8d1;
+  box-sizing: border-box;
+}
+
+.match-answer-label {
+  color: #b5362b;
+  font-size: 22rpx;
+  margin-bottom: 8rpx;
+}
+
+.match-answer-value {
+  color: #1f2937;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

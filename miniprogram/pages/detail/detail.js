@@ -1,6 +1,7 @@
 const service = require('../../utils/service');
 const format = require('../../utils/format');
 const cloudService = require('../../utils/cloud-service');
+const match = require('../../utils/match');
 
 Page({
   data: {
@@ -68,36 +69,7 @@ Page({
   },
 
   applyProfile(profile) {
-    const greetingTemplates =
-      profile.contactChannel === 'parent'
-        ? [
-            {
-              label: '家长开场',
-              text: '你好，我是家长，想帮成年子女先了解一下双方基本情况。'
-            },
-            {
-              label: '同城了解',
-              text: '你好，我们也在新化这边，想先和家长简单沟通一下。'
-            },
-            {
-              label: '认真沟通',
-              text: '你好，看到资料感觉比较合适，想先了解一下家庭和孩子本人的想法。'
-            }
-          ]
-        : [
-            {
-              label: '生活节奏',
-              text: '你好，看到你的资料，感觉我们的生活节奏挺接近，想简单认识一下。'
-            },
-            {
-              label: '同城开场',
-              text: '你好，我们都在新化这边，感觉可以先聊聊，看看是否合适。'
-            },
-            {
-              label: '认真了解',
-              text: '你好，我认真看了你的资料，觉得择偶想法比较真诚，想进一步了解一下。'
-            }
-          ];
+    const greetingTemplates = match.buildIcebreakers(profile, profile.contactChannel);
     this.setData({
       greetingTemplates,
       message: greetingTemplates[0].text,

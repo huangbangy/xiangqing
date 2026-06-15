@@ -58,6 +58,7 @@ function makeProfile(payload) {
     relationshipView: payload.relationshipView || '',
     weekendPlan: payload.weekendPlan || '',
     lifestyleTags: payload.lifestyleTags || [],
+    matchAnswers: payload.matchAnswers || {},
     bio: payload.bio || '',
     expectation: payload.expectation || '',
     photos: payload.photos || [],
@@ -111,6 +112,13 @@ function createSeedState() {
       relationshipView: '希望两个人能好好说话，也能一起把日子过稳。',
       weekendPlan: '周末常在城区逛逛，偶尔回家陪父母。',
       lifestyleTags: ['做饭', '散步', '顾家', '慢热'],
+      matchAnswers: {
+        weekendStyle: '陪家人',
+        homePlan: '新化稳定',
+        marriagePace: '一到两年',
+        familyView: '多走动',
+        conflictStyle: '冷静再聊'
+      },
       bio: '认真工作，认真生活，想找一个在新化能踏实过日子的人。',
       expectation: '希望对方真诚、稳定、尊重家庭。',
       reviewStatus: 'draft',
@@ -149,6 +157,13 @@ function createSeedState() {
       relationshipView: '比起轰轰烈烈，更看重稳定、耐心和边界感。',
       weekendPlan: '周末喜欢做饭、徒步，天气好会去资江边走走。',
       lifestyleTags: ['幼教', '做饭', '徒步', '情绪稳定'],
+      matchAnswers: {
+        weekendStyle: '出去走走',
+        homePlan: '新化稳定',
+        marriagePace: '一到两年',
+        familyView: '多走动',
+        conflictStyle: '先听对方'
+      },
       bio: '性格温和，喜欢做饭、徒步和看书。',
       expectation: '希望对方靠谱，有稳定工作，情绪稳定。',
       reviewStatus: 'approved',
@@ -180,6 +195,13 @@ function createSeedState() {
       relationshipView: '希望关系里有回应，不冷处理，不让人猜。',
       weekendPlan: '休息日会去菜市场、咖啡店，偶尔和朋友吃饭。',
       lifestyleTags: ['护士', '会沟通', '咖啡', '干净生活'],
+      matchAnswers: {
+        weekendStyle: '安静休息',
+        homePlan: '两边都可',
+        marriagePace: '慢慢了解',
+        familyView: '互相尊重',
+        conflictStyle: '当天说开'
+      },
       bio: '工作规律，周末喜欢去菜市场和咖啡店。',
       expectation: '希望对方有责任感，沟通顺畅，不冷暴力。',
       reviewStatus: 'approved',
@@ -218,6 +240,13 @@ function createSeedState() {
       relationshipView: '希望两个人能一起解决问题，而不是互相消耗。',
       weekendPlan: '周末回家陪父母，或者约朋友打球。',
       lifestyleTags: ['工程师', '打球', '顾家', '稳定工作'],
+      matchAnswers: {
+        weekendStyle: '出去走走',
+        homePlan: '长沙发展',
+        marriagePace: '一到两年',
+        familyView: '互相尊重',
+        conflictStyle: '一起商量'
+      },
       bio: '平时比较安静，周末会回家陪父母，偶尔打球。',
       expectation: '希望找一个性格合拍、愿意一起经营生活的人。',
       reviewStatus: 'approved',

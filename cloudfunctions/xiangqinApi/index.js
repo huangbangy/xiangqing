@@ -286,6 +286,7 @@ function defaultProfileForUser(user) {
     relationshipView: '',
     weekendPlan: '',
     lifestyleTags: [],
+    matchAnswers: {},
     bio: '',
     expectation: '',
     photos: [],
@@ -344,6 +345,7 @@ function normalizeProfileInput(payload) {
     'relationshipView',
     'weekendPlan',
     'lifestyleTags',
+    'matchAnswers',
     'bio',
     'expectation',
     'photos'
@@ -359,6 +361,7 @@ function normalizeProfileInput(payload) {
   next.hasChildren = !!next.hasChildren;
   next.photos = Array.isArray(next.photos) ? next.photos : [];
   next.lifestyleTags = Array.isArray(next.lifestyleTags) ? next.lifestyleTags : [];
+  next.matchAnswers = next.matchAnswers && typeof next.matchAnswers === 'object' ? next.matchAnswers : {};
   next.publisherType = next.publisherType || 'self';
   next.childConsentStatus = next.publisherType === 'parent' ? next.childConsentStatus || 'confirmed' : 'self';
   if (!next.avatarUrl && !next.avatarText && next.nickname) {
@@ -381,14 +384,27 @@ function profileAuditItems(profile) {
     { key: 'lifeRhythm', label: '生活节奏' },
     { key: 'relationshipView', label: '关系期待' },
     { key: 'weekendPlan', label: '周末安排' },
+    { key: 'matchAnswers', label: '缘分问答' },
     { key: 'bio', label: '自我介绍' },
     { key: 'expectation', label: '择偶要求' }
   ];
   return fields
-    .map((field) => ({
-      label: field.label,
-      content: source[field.key]
-    }))
+    .map((field) => {
+      if (field.key === 'matchAnswers') {
+        const answers = source.matchAnswers && typeof source.matchAnswers === 'object' ? source.matchAnswers : {};
+        return {
+          label: field.label,
+          content: Object.keys(answers)
+            .map((key) => answers[key])
+            .filter(Boolean)
+            .join(' ')
+        };
+      }
+      return {
+        label: field.label,
+        content: source[field.key]
+      };
+    })
     .filter((item) => String(item.content || '').trim());
 }
 
@@ -767,7 +783,8 @@ function matchesKeyword(profile, keyword) {
     profile.parentName,
     profile.parentRelation,
     profile.parentContactNote,
-    ...(Array.isArray(profile.lifestyleTags) ? profile.lifestyleTags : [])
+    ...(Array.isArray(profile.lifestyleTags) ? profile.lifestyleTags : []),
+    ...Object.keys(profile.matchAnswers || {}).map((key) => profile.matchAnswers[key])
   ]
     .filter(Boolean)
     .join(' ')

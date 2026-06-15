@@ -144,6 +144,21 @@
 
   <view class="section card stack-16">
     <view>
+      <view class="section-title">缘分问答</view>
+      <view class="subtle">轻松回答几个问题，系统会帮你生成更自然的开场白。</view>
+    </view>
+    <view wx:for="{{matchQuestions}}" wx:for-item="question" wx:key="key" class="match-question">
+      <view class="label">{{question.label}}</view>
+      <view class="match-options">
+        <button wx:for="{{question.options}}" wx:for-item="option" wx:key="*this" class="match-option {{question.selected === option ? 'match-option-active' : ''}}" catchtap="chooseMatchAnswer" data-key="{{question.key}}" data-value="{{option}}">
+          {{option}}
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card stack-16">
+    <view>
       <view class="section-title">联系方式</view>
       <view class="subtle">只有你同意对方的联系申请后，对方才能看到这里的信息。</view>
     </view>

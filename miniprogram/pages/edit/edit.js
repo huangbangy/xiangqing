@@ -1,6 +1,7 @@
 const service = require('../../utils/service');
 const format = require('../../utils/format');
 const cloudService = require('../../utils/cloud-service');
+const match = require('../../utils/match');
 
 const cityOptions = [
   '新化县城区',
@@ -57,6 +58,7 @@ function normalizeForm(profile) {
       relationshipView: '',
       weekendPlan: '',
       lifestyleTags: [],
+      matchAnswers: {},
       bio: '',
       expectation: '',
       photos: []
@@ -114,6 +116,7 @@ Page({
     carStatusOptions: ['无车', '有车'],
     hasChildrenOptions: ['无孩子', '有孩子'],
     tagOptions,
+    matchQuestions: match.buildEditQuestions({}),
     genderIndex: 1,
     hometownIndex: 0,
     currentCityIndex: 0,
@@ -153,6 +156,7 @@ Page({
   syncForm(form) {
     const nextData = {
       form,
+      matchQuestions: match.buildEditQuestions(form.matchAnswers),
       statusText: format.formatStatus(form.reviewStatus || 'draft'),
       hasChildrenIndex: form.hasChildren ? 1 : 0
     };
@@ -211,6 +215,21 @@ Page({
     }
     this.setData({
       'form.lifestyleTags': tags
+    });
+  },
+
+  chooseMatchAnswer(event) {
+    const key = event.currentTarget.dataset.key;
+    const value = event.currentTarget.dataset.value;
+    const answers = Object.assign({}, this.data.form.matchAnswers || {});
+    if (answers[key] === value) {
+      delete answers[key];
+    } else {
+      answers[key] = value;
+    }
+    this.setData({
+      'form.matchAnswers': answers,
+      matchQuestions: match.buildEditQuestions(answers)
     });
   },
 

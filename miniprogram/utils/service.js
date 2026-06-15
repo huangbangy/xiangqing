@@ -7,6 +7,7 @@ const {
   formatReportStatus,
   profileTags
 } = require('./format');
+const match = require('./match');
 
 const legacyThemeColors = {
   '#0f766e': '#c63d2f',
@@ -428,6 +429,7 @@ function ensureProfileForCurrentUser(stateArg) {
       relationshipView: '',
       weekendPlan: '',
       lifestyleTags: [],
+      matchAnswers: {},
       bio: '',
       expectation: '',
       photos: [],
@@ -464,7 +466,8 @@ function matchesKeyword(profile, keyword) {
     profile.parentName,
     profile.parentRelation,
     profile.parentContactNote,
-    ...(Array.isArray(profile.lifestyleTags) ? profile.lifestyleTags : [])
+    ...(Array.isArray(profile.lifestyleTags) ? profile.lifestyleTags : []),
+    ...Object.keys(profile.matchAnswers || {}).map((key) => profile.matchAnswers[key])
   ]
     .filter(Boolean)
     .join(' ')
@@ -579,6 +582,11 @@ const completionRules = [
     label: '生活标签',
     weight: 6,
     check: (profile) => Array.isArray(profile.lifestyleTags) && profile.lifestyleTags.length > 0
+  },
+  {
+    label: '缘分问答',
+    weight: 6,
+    check: (profile) => match.buildAnswerCards(profile.matchAnswers).length > 0
   },
   {
     label: '联系方式',
@@ -820,6 +828,7 @@ function enrichProfile(state, profile) {
     { label: '关系期待', value: profile.relationshipView || '还没写' },
     { label: '周末怎么过', value: profile.weekendPlan || '还没写' }
   ];
+  const matchQuestionCards = match.buildAnswerCards(profile.matchAnswers);
   if (!canViewContact || channel === 'parent') {
     nextProfile.phone = '';
     nextProfile.wechatId = '';
@@ -835,6 +844,9 @@ function enrichProfile(state, profile) {
   return Object.assign({}, nextProfile, {
     tags: profileTags(profile),
     lifestyleTags: Array.isArray(profile.lifestyleTags) ? profile.lifestyleTags : [],
+    matchAnswers: match.normalizeMatchAnswers(profile.matchAnswers),
+    matchQuestionCards,
+    matchAnswerCount: matchQuestionCards.length,
     introCards,
     introSnippet: [profile.lifeRhythm, profile.relationshipView, profile.weekendPlan].find(Boolean) || profile.bio || '',
     publisherText: publisherText(profile),
@@ -937,6 +949,7 @@ function normalizeProfileInput(payload) {
   next.hasChildren = !!next.hasChildren;
   next.photos = Array.isArray(next.photos) ? next.photos : [];
   next.lifestyleTags = Array.isArray(next.lifestyleTags) ? next.lifestyleTags : [];
+  next.matchAnswers = match.normalizeMatchAnswers(next.matchAnswers);
   next.publisherType = next.publisherType || 'self';
   next.childConsentStatus = next.publisherType === 'parent' ? next.childConsentStatus || 'confirmed' : 'self';
   if (!next.avatarUrl && !next.avatarText && next.nickname) {

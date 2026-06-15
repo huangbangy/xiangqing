@@ -1,5 +1,6 @@
 const service = require('../../utils/service');
 const cloudService = require('../../utils/cloud-service');
+const match = require('../../utils/match');
 
 Page({
   data: {
@@ -54,18 +55,7 @@ Page({
   },
 
   applyConversation(conversation) {
-    const quickReplies =
-      conversation.channel === 'parent'
-        ? [
-            '方便先介绍一下孩子的基本情况吗？',
-            '我们也在新化，可以先了解双方家庭情况。',
-            '如果孩子本人也愿意，我们再安排双方沟通。'
-          ]
-        : [
-            '可以先聊聊平时生活节奏吗？',
-            '我认真看了资料，想多了解你的择偶想法。',
-            '如果聊得合适，我们再慢慢约时间见面。'
-          ];
+    const quickReplies = match.buildIcebreakers(conversation.peerProfile, conversation.channel || 'self');
     const messages = conversation.messages || [];
     this.setData({
       conversation,

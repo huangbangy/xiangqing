@@ -40,7 +40,7 @@
 
     <view class="chat-composer-wrap">
       <view class="quick-replies">
-        <button wx:for="{{quickReplies}}" wx:key="*this" class="quick-chip" catchtap="useQuickReply" data-text="{{item}}">{{item}}</button>
+        <button wx:for="{{quickReplies}}" wx:key="label" class="quick-chip" catchtap="useQuickReply" data-text="{{item.text}}">{{item.label}}</button>
       </view>
       <view class="composer-row">
         <input class="chat-input" value="{{input}}" confirm-type="send" placeholder="写点真诚的开场" bindinput="onInput" bindconfirm="sendMessage" />

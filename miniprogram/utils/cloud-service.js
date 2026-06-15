@@ -1,5 +1,6 @@
 const config = require('./config');
 const format = require('./format');
+const match = require('./match');
 
 function isReady() {
   return !!(config.useCloud && typeof wx !== 'undefined' && wx.cloud && wx.cloud.callFunction);
@@ -154,6 +155,11 @@ const completionRules = [
     check: (profile) => Array.isArray(profile.lifestyleTags) && profile.lifestyleTags.length > 0
   },
   {
+    label: '缘分问答',
+    weight: 6,
+    check: (profile) => match.buildAnswerCards(profile.matchAnswers).length > 0
+  },
+  {
     label: '联系方式',
     weight: 5,
     check: (profile) =>
@@ -211,6 +217,7 @@ function enrichProfile(profile) {
     { label: '关系期待', value: next.relationshipView || '还没写' },
     { label: '周末怎么过', value: next.weekendPlan || '还没写' }
   ];
+  const matchQuestionCards = match.buildAnswerCards(next.matchAnswers);
   return Object.assign({}, next, {
     id: next.id || next._id || '',
     userId: next.userId || '',
@@ -218,6 +225,9 @@ function enrichProfile(profile) {
     avatarColor: next.avatarColor || '#c63d2f',
     tags: format.profileTags(next),
     lifestyleTags: Array.isArray(next.lifestyleTags) ? next.lifestyleTags : [],
+    matchAnswers: match.normalizeMatchAnswers(next.matchAnswers),
+    matchQuestionCards,
+    matchAnswerCount: matchQuestionCards.length,
     introCards,
     introSnippet: [next.lifeRhythm, next.relationshipView, next.weekendPlan].find(Boolean) || next.bio || '',
     publisherText: publisherText(next),

@@ -46,6 +46,7 @@
 | relationship_view | string | 关系期待，一句话 |
 | weekend_plan | string | 周末习惯，一句话 |
 | lifestyle_tags | json | 生活标签 |
+| match_answers | json | 缘分问答答案，如周末节奏、生活地、婚恋节奏 |
 | bio | text | 自我介绍 |
 | expectation | text | 择偶要求 |
 | review_status | string | draft / pending / approved / rejected / hidden |
@@ -60,6 +61,7 @@
 | profile_completion_missing | json | 待补充字段列表 |
 | match_score | int | 首页今日推荐的缘分值 |
 | match_reasons | json | 推荐理由，如同城、年龄接近、共同生活标签 |
+| match_question_cards | json | 详情页展示的缘分问答卡 |
 
 ## 3. Photo 照片表
 
