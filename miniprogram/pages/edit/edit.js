@@ -27,6 +27,21 @@ const pickerFields = [
   'carStatus'
 ];
 
+const textInputFields = [
+  'nickname',
+  'age',
+  'height',
+  'occupation',
+  'lifeRhythm',
+  'relationshipView',
+  'weekendPlan',
+  'wechatId',
+  'phone',
+  'contactNote',
+  'bio',
+  'expectation'
+];
+
 function optionIndex(options, value) {
   const index = options.findIndex((item) => item === value);
   return index >= 0 ? index : 0;
@@ -107,6 +122,7 @@ const tagOptions = [
 Page({
   data: {
     form: normalizeForm({}),
+    inputValues: {},
     statusText: '草稿',
     loadingProfile: false,
     draftDirty: false,
@@ -174,8 +190,14 @@ Page({
   },
 
   syncForm(form) {
+    const inputValues = {};
+    textInputFields.forEach((field) => {
+      const value = form[field];
+      inputValues[field] = value === undefined || value === null ? '' : String(value);
+    });
     const nextData = {
       form,
+      inputValues,
       matchQuestions: match.buildEditQuestions(form.matchAnswers),
       statusText: format.formatStatus(form.reviewStatus || 'draft'),
       hasChildrenIndex: form.hasChildren ? 1 : 0
@@ -186,6 +208,14 @@ Page({
     this.setData(nextData);
   },
 
+  updateFormFields(fields) {
+    const form = Object.assign({}, this.data.form || {}, fields || {});
+    this.setData({
+      draftDirty: true,
+      form
+    });
+  },
+
   onInput(event) {
     const field = event.currentTarget.dataset.field;
     if (!field) {
@@ -193,34 +223,43 @@ Page({
     }
     const rawValue = event.detail.value;
     const numberFields = ['age', 'height'];
-    const value = numberFields.includes(field) && rawValue !== '' ? Number(rawValue) : rawValue;
-    const nextData = {
-      draftDirty: true,
-      [`form.${field}`]: value
-    };
+    const value = numberFields.indexOf(field) >= 0 && rawValue !== '' ? Number(rawValue) : rawValue;
+    const form = Object.assign({}, this.data.form || {}, {
+      [field]: value
+    });
+    const inputValues = Object.assign({}, this.data.inputValues || {}, {
+      [field]: rawValue
+    });
     if (field === 'nickname' && !this.data.form.avatarUrl) {
-      nextData['form.avatarText'] = rawValue ? rawValue.slice(0, 1) : '我';
+      form.avatarText = rawValue ? rawValue.slice(0, 1) : '我';
     }
-    this.setData(nextData);
+    this.setData({
+      draftDirty: true,
+      form,
+      inputValues
+    });
+    return rawValue;
   },
 
   onPickerChange(event) {
     const field = event.currentTarget.dataset.field;
     const index = Number(event.detail.value);
     const options = this.data[`${field}Options`];
+    this.updateFormFields({
+      [field]: options[index]
+    });
     this.setData({
-      draftDirty: true,
-      [`${field}Index`]: index,
-      [`form.${field}`]: options[index]
+      [`${field}Index`]: index
     });
   },
 
   onChildrenChange(event) {
     const index = Number(event.detail.value);
+    this.updateFormFields({
+      hasChildren: index === 1
+    });
     this.setData({
-      draftDirty: true,
-      hasChildrenIndex: index,
-      'form.hasChildren': index === 1
+      hasChildrenIndex: index
     });
   },
 
@@ -239,9 +278,8 @@ Page({
       });
       return;
     }
-    this.setData({
-      draftDirty: true,
-      'form.lifestyleTags': tags
+    this.updateFormFields({
+      lifestyleTags: tags
     });
   },
 
@@ -254,9 +292,10 @@ Page({
     } else {
       answers[key] = value;
     }
+    this.updateFormFields({
+      matchAnswers: answers
+    });
     this.setData({
-      draftDirty: true,
-      'form.matchAnswers': answers,
       matchQuestions: match.buildEditQuestions(answers)
     });
   },
@@ -282,10 +321,9 @@ Page({
           this.uploadAvatar(localPath);
           return;
         }
-        this.setData({
-          draftDirty: true,
-          'form.avatarUrl': localPath,
-          'form.avatarText': ''
+        this.updateFormFields({
+          avatarUrl: localPath,
+          avatarText: ''
         });
       }
     });
@@ -297,10 +335,9 @@ Page({
       .uploadImage(localPath, 'avatars')
       .then((result) => {
         this.clearUploading();
-        this.setData({
-          draftDirty: true,
-          'form.avatarUrl': result.fileID,
-          'form.avatarText': ''
+        this.updateFormFields({
+          avatarUrl: result.fileID,
+          avatarText: ''
         });
         wx.showToast({
           title: '头像审核通过',
@@ -346,9 +383,8 @@ Page({
           this.uploadPhotos(selectedPaths, photos);
           return;
         }
-        this.setData({
-          draftDirty: true,
-          'form.photos': photos.concat(selectedPaths).slice(0, 6)
+        this.updateFormFields({
+          photos: photos.concat(selectedPaths).slice(0, 6)
         });
       }
     });
@@ -360,9 +396,8 @@ Page({
       .uploadImages(localPaths, 'photos')
       .then((fileIDs) => {
         this.clearUploading();
-        this.setData({
-          draftDirty: true,
-          'form.photos': (existingPhotos || []).concat(fileIDs).slice(0, 6)
+        this.updateFormFields({
+          photos: (existingPhotos || []).concat(fileIDs).slice(0, 6)
         });
         wx.showToast({
           title: `已通过 ${fileIDs.length} 张`,
@@ -428,9 +463,8 @@ Page({
     const index = Number(event.currentTarget.dataset.index);
     const photos = (this.data.form.photos || []).slice();
     photos.splice(index, 1);
-    this.setData({
-      draftDirty: true,
-      'form.photos': photos
+    this.updateFormFields({
+      photos
     });
   },
 

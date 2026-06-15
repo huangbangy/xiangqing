@@ -27,7 +27,7 @@
   <view class="section card stack-16">
     <view>
       <view class="label">昵称</view>
-      <input class="input" value="{{form.nickname}}" placeholder="例如：新化小溪" data-field="nickname" bindinput="onInput" />
+      <input class="input" value="{{inputValues.nickname}}" placeholder="例如：新化小溪" data-field="nickname" bindinput="onInput" />
     </view>
 
     <view class="form-grid">
@@ -39,7 +39,7 @@
       </view>
       <view>
         <view class="label">年龄</view>
-        <input class="input" type="number" value="{{form.age}}" placeholder="例如 28" data-field="age" bindinput="onInput" />
+        <input class="input" type="number" value="{{inputValues.age}}" placeholder="例如 28" data-field="age" bindinput="onInput" />
       </view>
     </view>
 
@@ -61,7 +61,7 @@
     <view class="form-grid">
       <view>
         <view class="label">身高 cm</view>
-        <input class="input" type="number" value="{{form.height}}" placeholder="例如 165" data-field="height" bindinput="onInput" />
+        <input class="input" type="number" value="{{inputValues.height}}" placeholder="例如 165" data-field="height" bindinput="onInput" />
       </view>
       <view>
         <view class="label">学历</view>
@@ -73,7 +73,7 @@
 
     <view>
       <view class="label">职业</view>
-      <input class="input" value="{{form.occupation}}" placeholder="例如：教师、护士、工程师" data-field="occupation" bindinput="onInput" />
+      <input class="input" value="{{inputValues.occupation}}" placeholder="例如：教师、护士、工程师" data-field="occupation" bindinput="onInput" />
     </view>
 
     <view class="form-grid">
@@ -121,15 +121,15 @@
     </view>
     <view>
       <view class="label">我的生活节奏</view>
-      <textarea class="textarea short-textarea" maxlength="90" value="{{form.lifeRhythm}}" placeholder="例如：工作日规律上班，晚上会散步或做饭" data-field="lifeRhythm" bindinput="onInput" />
+      <textarea class="textarea short-textarea" maxlength="90" value="{{inputValues.lifeRhythm}}" placeholder="例如：工作日规律上班，晚上会散步或做饭" data-field="lifeRhythm" bindinput="onInput" />
     </view>
     <view>
       <view class="label">我看重的关系</view>
-      <textarea class="textarea short-textarea" maxlength="90" value="{{form.relationshipView}}" placeholder="例如：希望能好好说话，也能一起把日子过稳" data-field="relationshipView" bindinput="onInput" />
+      <textarea class="textarea short-textarea" maxlength="90" value="{{inputValues.relationshipView}}" placeholder="例如：希望能好好说话，也能一起把日子过稳" data-field="relationshipView" bindinput="onInput" />
     </view>
     <view>
       <view class="label">周末通常怎么过</view>
-      <textarea class="textarea short-textarea" maxlength="90" value="{{form.weekendPlan}}" placeholder="例如：常在城区逛逛，偶尔回家陪父母" data-field="weekendPlan" bindinput="onInput" />
+      <textarea class="textarea short-textarea" maxlength="90" value="{{inputValues.weekendPlan}}" placeholder="例如：常在城区逛逛，偶尔回家陪父母" data-field="weekendPlan" bindinput="onInput" />
     </view>
     <view>
       <view class="label">生活标签</view>
@@ -164,26 +164,26 @@
     </view>
     <view>
       <view class="label">微信号</view>
-      <input class="input" value="{{form.wechatId}}" placeholder="例如：xinhua_demo" data-field="wechatId" bindinput="onInput" />
+      <input class="input" value="{{inputValues.wechatId}}" placeholder="例如：xinhua_demo" data-field="wechatId" bindinput="onInput" />
     </view>
     <view>
       <view class="label">手机号</view>
-      <input class="input" type="number" value="{{form.phone}}" placeholder="可选" data-field="phone" bindinput="onInput" />
+      <input class="input" type="number" value="{{inputValues.phone}}" placeholder="可选" data-field="phone" bindinput="onInput" />
     </view>
     <view>
       <view class="label">联系备注</view>
-      <textarea class="textarea contact-note" maxlength="120" value="{{form.contactNote}}" placeholder="例如：工作日晚上回复较快" data-field="contactNote" bindinput="onInput" />
+      <textarea class="textarea contact-note" maxlength="120" value="{{inputValues.contactNote}}" placeholder="例如：工作日晚上回复较快" data-field="contactNote" bindinput="onInput" />
     </view>
   </view>
 
   <view class="section card stack-16">
     <view>
       <view class="label">自我介绍</view>
-      <textarea class="textarea" maxlength="300" value="{{form.bio}}" placeholder="简单介绍你的性格、工作、生活习惯" data-field="bio" bindinput="onInput" />
+      <textarea class="textarea" maxlength="300" value="{{inputValues.bio}}" placeholder="简单介绍你的性格、工作、生活习惯" data-field="bio" bindinput="onInput" />
     </view>
     <view>
       <view class="label">择偶要求</view>
-      <textarea class="textarea" maxlength="300" value="{{form.expectation}}" placeholder="写清楚你比较看重什么" data-field="expectation" bindinput="onInput" />
+      <textarea class="textarea" maxlength="300" value="{{inputValues.expectation}}" placeholder="写清楚你比较看重什么" data-field="expectation" bindinput="onInput" />
     </view>
   </view>
 
