@@ -198,6 +198,40 @@
   margin-top: 18rpx;
 }
 
+.trust-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 16rpx;
+}
+
+.trust-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 42rpx;
+  line-height: 42rpx;
+  padding: 0 14rpx;
+  border-radius: 21rpx;
+  font-size: 22rpx;
+  background: #fff1f2;
+  color: #7f1d1d;
+}
+
+.trust-badge-primary {
+  background: #c63d2f;
+  color: #ffffff;
+}
+
+.trust-badge-warm {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.trust-badge-soft {
+  background: #fff1f2;
+  color: #b5362b;
+}
+
 .tag-warm {
   background: #fff7ed;
   color: #c2410c;

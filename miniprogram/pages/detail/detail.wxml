@@ -49,6 +49,16 @@
       </view>
     </view>
 
+    <view wx:if="{{profile.trustBadges.length}}" class="section card">
+      <view class="section-title">资料可信度</view>
+      <view class="trust-grid">
+        <view wx:for="{{profile.trustBadges}}" wx:key="label" class="trust-item trust-item-{{item.tone}}">
+          <view class="trust-dot"></view>
+          <view>{{item.label}}</view>
+        </view>
+      </view>
+    </view>
+
     <view class="section card">
       <view class="section-title">三句话认识我</view>
       <view class="intro-list">

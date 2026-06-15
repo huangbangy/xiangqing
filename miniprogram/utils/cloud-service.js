@@ -209,6 +209,29 @@ function contactActionText(profile) {
   return profile.contactChannel === 'parent' ? '家长沟通' : '发起联系';
 }
 
+function trustBadges(profile, completion) {
+  const source = profile || {};
+  const badges = [];
+  if (source.reviewStatus === 'approved' && source.isPublic) {
+    badges.push({ label: '已审核', tone: 'primary' });
+  }
+  if (completion.score >= 85) {
+    badges.push({ label: '资料完整', tone: 'warm' });
+  }
+  if (Array.isArray(source.photos) && source.photos.length) {
+    badges.push({ label: '有生活照', tone: 'soft' });
+  }
+  if (match.buildAnswerCards(source.matchAnswers).length >= 3) {
+    badges.push({ label: '问答清楚', tone: 'soft' });
+  }
+  if (source.canViewContact) {
+    badges.push({ label: '已开放联系', tone: 'warm' });
+  } else {
+    badges.push({ label: '联系保护', tone: 'soft' });
+  }
+  return badges.slice(0, 4);
+}
+
 function enrichProfile(profile) {
   const next = Object.assign({}, profile || {});
   const completion = calculateProfileCompletion(next);
@@ -228,6 +251,7 @@ function enrichProfile(profile) {
     matchAnswers: match.normalizeMatchAnswers(next.matchAnswers),
     matchQuestionCards,
     matchAnswerCount: matchQuestionCards.length,
+    trustBadges: trustBadges(next, completion),
     introCards,
     introSnippet: [next.lifeRhythm, next.relationshipView, next.weekendPlan].find(Boolean) || next.bio || '',
     publisherText: publisherText(next),

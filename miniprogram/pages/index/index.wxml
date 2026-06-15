@@ -81,6 +81,7 @@
         </view>
 
         <view class="recommend-tags">
+          <text wx:for="{{item.trustBadges}}" wx:key="label" class="trust-badge trust-badge-{{item.tone}}">{{item.label}}</text>
           <text class="tag tag-soft">{{item.profileCompletionText}}</text>
           <text class="tag tag-soft">{{item.contactChannelText}}</text>
           <text wx:for="{{item.lifestyleTags}}" wx:key="*this" class="tag tag-warm">{{item}}</text>
@@ -132,6 +133,10 @@
 
       <view wx:if="{{item.lifestyleTags.length}}" class="lifestyle-row">
         <text wx:for="{{item.lifestyleTags}}" wx:key="*this" class="tag tag-warm">{{item}}</text>
+      </view>
+
+      <view wx:if="{{item.trustBadges.length}}" class="trust-row">
+        <text wx:for="{{item.trustBadges}}" wx:key="label" class="trust-badge trust-badge-{{item.tone}}">{{item.label}}</text>
       </view>
 
       <view class="tag-row">

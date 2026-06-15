@@ -21,6 +21,8 @@
 - 云数据库集合：`users`、`profiles`、`favorites`、`contactRequests`、`conversations`、`messages`、`reports`、`reviewLogs`
 - 真实数据库初始化：当前已验证资料 5 条、用户 6 条
 - 缘分问答卡和基于答案的破冰开场白
+- 资料可信度标签：已审核、资料完整、有生活照、联系保护
+- 新化本地化生活标签
 - 头像和相册上传到云存储
 - 图片上传后的微信内容安全审核
 - 资料文本、联系申请、聊天消息、举报说明的微信内容安全审核
@@ -67,6 +69,7 @@ cloud1-d1gpuptkh7143c8ab
 - 编辑资料提交审核前，未勾选协议会提示先同意
 - 编辑资料可填写缘分问答，详情页可展示问答卡
 - 聊天页快捷开场白会按对方资料生成
+- 首页和详情页能看到资料可信度标签
 - 保存草稿后，数据库 `profiles.avatarUrl` / `profiles.photos` 是 `cloud://` 开头
 - 云开发控制台“存储”里出现 `xiangqin/avatars/` 和 `xiangqin/photos/`
 - 举报提交后，数据库 `reports` 里出现新记录

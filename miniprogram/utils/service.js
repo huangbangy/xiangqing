@@ -814,6 +814,26 @@ function hasAcceptedContact(state, profileId, channel) {
   );
 }
 
+function trustBadges(profile, profileCompletion, canViewContact) {
+  const badges = [];
+  if (profile.reviewStatus === 'approved' && profile.isPublic) {
+    badges.push({ label: '已审核', tone: 'primary' });
+  }
+  if (profileCompletion.score >= 85) {
+    badges.push({ label: '资料完整', tone: 'warm' });
+  }
+  if (Array.isArray(profile.photos) && profile.photos.length) {
+    badges.push({ label: '有生活照', tone: 'soft' });
+  }
+  if (match.buildAnswerCards(profile.matchAnswers).length >= 3) {
+    badges.push({ label: '问答清楚', tone: 'soft' });
+  }
+  if (hasContent(profile.phone) || hasContent(profile.wechatId) || hasContent(profile.parentPhone) || hasContent(profile.parentWechatId)) {
+    badges.push({ label: canViewContact ? '已开放联系' : '联系保护', tone: canViewContact ? 'warm' : 'soft' });
+  }
+  return badges.slice(0, 4);
+}
+
 function enrichProfile(state, profile) {
   if (!profile) {
     return null;
@@ -847,6 +867,7 @@ function enrichProfile(state, profile) {
     matchAnswers: match.normalizeMatchAnswers(profile.matchAnswers),
     matchQuestionCards,
     matchAnswerCount: matchQuestionCards.length,
+    trustBadges: trustBadges(profile, profileCompletion, canViewContact),
     introCards,
     introSnippet: [profile.lifeRhythm, profile.relationshipView, profile.weekendPlan].find(Boolean) || profile.bio || '',
     publisherText: publisherText(profile),
