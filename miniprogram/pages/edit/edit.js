@@ -108,6 +108,8 @@ Page({
   data: {
     form: normalizeForm({}),
     statusText: '草稿',
+    loadingProfile: false,
+    draftDirty: false,
     uploading: false,
     uploadingText: '',
     acceptedLegal: false,
@@ -142,15 +144,28 @@ Page({
 
   loadProfile() {
     if (cloudService.isReady()) {
+      this.setData({
+        loadingProfile: true
+      });
       cloudService
         .getMyProfile()
         .then((profile) => {
-          this.syncForm(normalizeForm(profile));
+          if (!this.data.draftDirty) {
+            this.syncForm(normalizeForm(profile));
+          }
+          this.setData({
+            loadingProfile: false
+          });
         })
         .catch((err) => {
           console.warn('cloud get my profile failed, fallback to mock', err);
-          const profile = service.getMyProfile();
-          this.syncForm(normalizeForm(profile));
+          if (!this.data.draftDirty) {
+            const profile = service.getMyProfile();
+            this.syncForm(normalizeForm(profile));
+          }
+          this.setData({
+            loadingProfile: false
+          });
         });
       return;
     }
@@ -173,10 +188,14 @@ Page({
 
   onInput(event) {
     const field = event.currentTarget.dataset.field;
+    if (!field) {
+      return;
+    }
     const rawValue = event.detail.value;
     const numberFields = ['age', 'height'];
     const value = numberFields.includes(field) && rawValue !== '' ? Number(rawValue) : rawValue;
     const nextData = {
+      draftDirty: true,
       [`form.${field}`]: value
     };
     if (field === 'nickname' && !this.data.form.avatarUrl) {
@@ -190,6 +209,7 @@ Page({
     const index = Number(event.detail.value);
     const options = this.data[`${field}Options`];
     this.setData({
+      draftDirty: true,
       [`${field}Index`]: index,
       [`form.${field}`]: options[index]
     });
@@ -198,6 +218,7 @@ Page({
   onChildrenChange(event) {
     const index = Number(event.detail.value);
     this.setData({
+      draftDirty: true,
       hasChildrenIndex: index,
       'form.hasChildren': index === 1
     });
@@ -219,6 +240,7 @@ Page({
       return;
     }
     this.setData({
+      draftDirty: true,
       'form.lifestyleTags': tags
     });
   },
@@ -233,6 +255,7 @@ Page({
       answers[key] = value;
     }
     this.setData({
+      draftDirty: true,
       'form.matchAnswers': answers,
       matchQuestions: match.buildEditQuestions(answers)
     });
@@ -260,6 +283,7 @@ Page({
           return;
         }
         this.setData({
+          draftDirty: true,
           'form.avatarUrl': localPath,
           'form.avatarText': ''
         });
@@ -274,6 +298,7 @@ Page({
       .then((result) => {
         this.clearUploading();
         this.setData({
+          draftDirty: true,
           'form.avatarUrl': result.fileID,
           'form.avatarText': ''
         });
@@ -322,6 +347,7 @@ Page({
           return;
         }
         this.setData({
+          draftDirty: true,
           'form.photos': photos.concat(selectedPaths).slice(0, 6)
         });
       }
@@ -335,6 +361,7 @@ Page({
       .then((fileIDs) => {
         this.clearUploading();
         this.setData({
+          draftDirty: true,
           'form.photos': (existingPhotos || []).concat(fileIDs).slice(0, 6)
         });
         wx.showToast({
@@ -402,6 +429,7 @@ Page({
     const photos = (this.data.form.photos || []).slice();
     photos.splice(index, 1);
     this.setData({
+      draftDirty: true,
       'form.photos': photos
     });
   },
@@ -429,6 +457,9 @@ Page({
       cloudService
         .saveMyProfile(this.data.form)
         .then((result) => {
+          this.setData({
+            draftDirty: false
+          });
           this.syncForm(normalizeForm(result.data));
           wx.showToast({
             title: result.message || '已保存草稿',
@@ -444,6 +475,9 @@ Page({
       return;
     }
     const profile = service.saveMyProfile(this.data.form);
+    this.setData({
+      draftDirty: false
+    });
     this.syncForm(normalizeForm(profile));
     wx.showToast({
       title: '已保存草稿',
@@ -466,6 +500,9 @@ Page({
       cloudService
         .submitMyProfile(this.data.form)
         .then((result) => {
+          this.setData({
+            draftDirty: false
+          });
           this.syncForm(normalizeForm(result.data));
           wx.showToast({
             title: result.message,
@@ -489,6 +526,9 @@ Page({
       });
       return;
     }
+    this.setData({
+      draftDirty: false
+    });
     this.syncForm(normalizeForm(result.data));
     wx.showToast({
       title: result.message,
