@@ -212,20 +212,35 @@ Page({
     this.loadList();
   },
 
-  contact(event) {
-    const userId = event.currentTarget.dataset.userid;
-    const profile = this.findDisplayedProfile(userId);
+  confirmContact(profile) {
+    const channelText = profile && profile.contactChannel === 'parent' ? '家长沟通' : '联系申请';
+    return new Promise((resolve) => {
+      wx.showModal({
+        title: `确认发起${channelText}`,
+        content: '请确认已认真看过资料；不发送骚扰内容；先通过站内聊天沟通；线下见面注意安全。',
+        confirmText: '确认发送',
+        cancelText: '再看看',
+        success: (res) => {
+          resolve(!!res.confirm);
+        },
+        fail: () => {
+          resolve(false);
+        }
+      });
+    });
+  },
+
+  submitContactRequest(profile, userId, viewerMode) {
     if (profile && profile.isCloud) {
-      const viewerMode = service.getViewerMode();
-      cloudService
+      return cloudService
         .createContactRequest({
           toUserId: userId,
           channel: profile.contactChannel,
           viewerMode,
           message:
             viewerMode === 'parent'
-              ? '你好，我是家长，想帮成年子女先了解一下双方基本情况。'
-              : '你好，看到你的资料，想认识一下。'
+              ? '你好，我是家长，已认真看过资料，想帮成年子女先了解一下双方基本情况。'
+              : '你好，我认真看了你的资料，想先通过站内聊天了解一下。'
         })
         .then((result) => {
           wx.showToast({
@@ -240,20 +255,45 @@ Page({
             icon: 'none'
           });
         });
-      return;
     }
-    const viewerMode = service.getViewerMode();
     const result = service.createContactRequest({
       toUserId: userId,
+      channel: profile ? profile.contactChannel : '',
       message:
         viewerMode === 'parent'
-          ? '你好，我是家长，想帮成年子女先了解一下双方基本情况。'
-          : '你好，看到你的资料，想认识一下。'
+          ? '你好，我是家长，已认真看过资料，想帮成年子女先了解一下双方基本情况。'
+          : '你好，我认真看了你的资料，想先通过站内聊天了解一下。'
     });
     wx.showToast({
       title: result.message,
       icon: result.ok ? 'success' : 'none'
     });
     this.loadList();
+    return Promise.resolve(result);
+  },
+
+  contact(event) {
+    const userId = event.currentTarget.dataset.userid;
+    const profile = this.findDisplayedProfile(userId);
+    if (!profile) {
+      wx.showToast({
+        title: '资料不存在',
+        icon: 'none'
+      });
+      return;
+    }
+    if (profile && profile.canViewContact) {
+      wx.navigateTo({
+        url: `/pages/detail/detail?id=${profile.id}`
+      });
+      return;
+    }
+    const viewerMode = service.getViewerMode();
+    this.confirmContact(profile).then((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      this.submitContactRequest(profile, userId, viewerMode);
+    });
   }
 });

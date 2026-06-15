@@ -77,6 +77,9 @@
               <text class="recommend-score">{{item.matchScoreText}}</text>
             </view>
             <view class="recommend-reason">{{item.matchReasonText}}</view>
+            <view wx:if="{{item.matchReasons.length}}" class="reason-chip-row">
+              <text wx:for="{{item.matchReasons}}" wx:key="*this" class="reason-chip">{{item}}</text>
+            </view>
           </view>
         </view>
 

@@ -69,6 +69,18 @@ function firstAnswer(answers, key) {
   return nextAnswers[key] || '';
 }
 
+function sharedAnswerLabels(leftAnswers, rightAnswers) {
+  const left = normalizeMatchAnswers(leftAnswers);
+  const right = normalizeMatchAnswers(rightAnswers);
+  const result = [];
+  matchQuestions.forEach((question) => {
+    if (left[question.key] && right[question.key] && left[question.key] === right[question.key]) {
+      result.push(question.shortLabel);
+    }
+  });
+  return result;
+}
+
 function buildIcebreakers(profile, channel) {
   const target = profile || {};
   const answers = normalizeMatchAnswers(target.matchAnswers);
@@ -76,6 +88,7 @@ function buildIcebreakers(profile, channel) {
   const weekend = firstAnswer(answers, 'weekendStyle');
   const homePlan = firstAnswer(answers, 'homePlan');
   const marriagePace = firstAnswer(answers, 'marriagePace');
+  const familyView = firstAnswer(answers, 'familyView');
   const conflictStyle = firstAnswer(answers, 'conflictStyle');
   const name = target.nickname || '你';
 
@@ -88,6 +101,12 @@ function buildIcebreakers(profile, channel) {
       replies.push({
         label: '生活地',
         text: `你好，看到资料里提到更倾向“${homePlan}”，我们也想先聊聊以后生活安排。`
+      });
+    }
+    if (familyView) {
+      replies.push({
+        label: '家庭观',
+        text: `你好，看到资料里对双方家庭的想法是“${familyView}”，这点我们也比较重视。`
       });
     }
     replies.push({
@@ -105,6 +124,18 @@ function buildIcebreakers(profile, channel) {
       replies.push({
         label: '节奏',
         text: `你好，我看到你对婚恋节奏的想法是“${marriagePace}”，想认真了解一下。`
+      });
+    }
+    if (homePlan) {
+      replies.push({
+        label: '生活地',
+        text: `你好，看到你以后生活地更偏向“${homePlan}”，想听听你的具体想法。`
+      });
+    }
+    if (familyView) {
+      replies.push({
+        label: '家庭观',
+        text: `你好，看到你对双方家庭的想法是“${familyView}”，感觉可以认真聊聊这个话题。`
       });
     }
     if (conflictStyle) {
@@ -126,7 +157,7 @@ function buildIcebreakers(profile, channel) {
     text: '你好，我认真看了你的资料，想先从生活和择偶想法聊起。'
   });
 
-  return replies.slice(0, 3);
+  return replies.slice(0, 5);
 }
 
 module.exports = {
@@ -134,5 +165,6 @@ module.exports = {
   normalizeMatchAnswers,
   buildEditQuestions,
   buildAnswerCards,
+  sharedAnswerLabels,
   buildIcebreakers
 };

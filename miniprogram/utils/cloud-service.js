@@ -272,13 +272,19 @@ function addRecommendationMeta(profile, index) {
   const score = Math.max(70, Math.min(96, 90 - index * 3));
   const reasons = [];
   if (profile.currentCity) {
-    reasons.push('同城生活圈');
+    reasons.push(`${profile.currentCity}生活圈`);
   }
   if (profile.profileCompletionScore >= 80) {
     reasons.push('资料较完整');
   }
   if (Array.isArray(profile.lifestyleTags) && profile.lifestyleTags.length) {
-    reasons.push('生活标签清晰');
+    reasons.push(`生活标签：${profile.lifestyleTags[0]}`);
+  }
+  if (profile.matchAnswerCount >= 3) {
+    reasons.push('缘分问答清楚');
+  }
+  if (profile.contactChannel === 'parent') {
+    reasons.push('可先家长沟通');
   }
   return Object.assign({}, profile, {
     matchScore: score,

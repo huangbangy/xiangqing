@@ -129,14 +129,29 @@ Page({
     this.loadProfile();
   },
 
-  contact() {
+  confirmContact() {
+    const profile = this.data.profile || {};
+    const channelText = profile.contactChannel === 'parent' ? '家长沟通' : '联系申请';
+    return new Promise((resolve) => {
+      wx.showModal({
+        title: `确认发起${channelText}`,
+        content: '请确认已认真看过资料；不发送骚扰内容；先通过站内聊天沟通；线下见面注意安全。',
+        confirmText: '确认发送',
+        cancelText: '再看看',
+        success: (res) => {
+          resolve(!!res.confirm);
+        },
+        fail: () => {
+          resolve(false);
+        }
+      });
+    });
+  },
+
+  submitContactRequest() {
     const profile = this.data.profile;
     if (profile.isCloud) {
-      if (profile.canViewContact) {
-        this.goChat();
-        return;
-      }
-      cloudService
+      return cloudService
         .createContactRequest({
           toUserId: profile.userId,
           message: this.data.message,
@@ -156,11 +171,6 @@ Page({
             icon: 'none'
           });
         });
-      return;
-    }
-    if (profile.canViewContact) {
-      this.goChat();
-      return;
     }
     const result = service.createContactRequest({
       toUserId: profile.userId,
@@ -172,6 +182,46 @@ Page({
       icon: result.ok ? 'success' : 'none'
     });
     this.loadProfile();
+    return Promise.resolve(result);
+  },
+
+  contact() {
+    const profile = this.data.profile;
+    if (profile.isCloud) {
+      if (profile.canViewContact) {
+        this.goChat();
+        return;
+      }
+      this.confirmContact().then((confirmed) => {
+        if (!confirmed) {
+          return;
+        }
+        this.submitContactRequest();
+      });
+      return;
+    }
+    if (profile.canViewContact) {
+      this.goChat();
+      return;
+    }
+    this.confirmContact().then((confirmed) => {
+      if (!confirmed) {
+        return;
+      }
+      this.submitContactRequest();
+    });
+  },
+
+  useSafetyMessage() {
+    this.setData({
+      message: '你好，我认真看了你的资料，想先通过站内聊天简单了解一下。线下见面前我们可以先核实基本信息。'
+    });
+  },
+
+  useParentMessage() {
+    this.setData({
+      message: '你好，我是家长，已认真看过资料，想先了解一下双方家庭和孩子本人的想法。'
+    });
   },
 
   goChat() {

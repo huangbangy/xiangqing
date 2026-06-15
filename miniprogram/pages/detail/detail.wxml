@@ -136,10 +136,17 @@
         </view>
       </block>
       <block wx:else>
+        <view class="contact-checklist">
+          <view class="check-item">已认真看过资料</view>
+          <view class="check-item">先站内沟通</view>
+          <view class="check-item">不发送骚扰内容</view>
+        </view>
         <view class="template-row">
           <button wx:for="{{greetingTemplates}}" wx:key="label" class="template-chip" catchtap="useGreetingTemplate" data-text="{{item.text}}">
             {{item.label}}
           </button>
+          <button class="template-chip template-chip-safe" catchtap="useSafetyMessage">稳妥申请</button>
+          <button wx:if="{{profile.contactChannel === 'parent'}}" class="template-chip template-chip-safe" catchtap="useParentMessage">家长说明</button>
         </view>
         <textarea class="textarea" value="{{message}}" maxlength="120" bindinput="onMessageInput" />
         <view class="row-between action-row">

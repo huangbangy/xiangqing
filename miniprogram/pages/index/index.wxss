@@ -363,6 +363,25 @@
   line-height: 1.45;
 }
 
+.reason-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+  margin-top: 12rpx;
+}
+
+.reason-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 38rpx;
+  line-height: 38rpx;
+  padding: 0 12rpx;
+  border-radius: 19rpx;
+  background: #f9f1ed;
+  color: #6f332c;
+  font-size: 20rpx;
+}
+
 .recommend-tags {
   display: flex;
   flex-wrap: wrap;

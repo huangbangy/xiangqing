@@ -187,6 +187,23 @@
   margin-bottom: 16rpx;
 }
 
+.contact-checklist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.check-item {
+  height: 42rpx;
+  line-height: 42rpx;
+  padding: 0 14rpx;
+  border-radius: 21rpx;
+  background: #f9f1ed;
+  color: #6f332c;
+  font-size: 22rpx;
+}
+
 .template-chip {
   height: 52rpx;
   line-height: 52rpx;
@@ -195,6 +212,11 @@
   background: #f5ebe6;
   color: #6f332c;
   font-size: 24rpx;
+}
+
+.template-chip-safe {
+  background: #f9e7e3;
+  color: #a53128;
 }
 
 .action-row {

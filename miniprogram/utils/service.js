@@ -643,6 +643,7 @@ function sharedLifestyleTags(leftProfile, rightProfile) {
 
 function recommendationReasons(profile, meProfile, state) {
   const reasons = [];
+  const sharedAnswers = match.sharedAnswerLabels(meProfile.matchAnswers, profile.matchAnswers);
   if (profile.currentCity && meProfile.currentCity && profile.currentCity === meProfile.currentCity) {
     reasons.push('同城生活圈');
   }
@@ -661,7 +662,13 @@ function recommendationReasons(profile, meProfile, state) {
   }
   const sharedTags = sharedLifestyleTags(meProfile, profile);
   if (sharedTags.length) {
-    reasons.push(`${sharedTags.length}个共同生活标签`);
+    reasons.push(`都喜欢${sharedTags[0]}`);
+    if (sharedTags.length > 1) {
+      reasons.push(`${sharedTags.length}个共同生活标签`);
+    }
+  }
+  if (sharedAnswers.length) {
+    reasons.push(`问答匹配：${sharedAnswers.slice(0, 2).join('、')}`);
   }
   if (contactChannelFor(state, profile) === 'parent') {
     reasons.push('可先家长沟通');
@@ -672,7 +679,7 @@ function recommendationReasons(profile, meProfile, state) {
   } else if (completion.score >= 70) {
     reasons.push('信息比较清楚');
   }
-  return reasons.slice(0, 3);
+  return reasons.slice(0, 5);
 }
 
 function recommendationScore(profile, meProfile, state) {
