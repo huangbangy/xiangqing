@@ -1518,6 +1518,55 @@ function getAdminReports() {
   return { ok: true, data };
 }
 
+function reviewActionText(action) {
+  const map = {
+    approve: '通过资料',
+    reject: '驳回资料',
+    hide: '下架资料',
+    resolve: '处理举报',
+    ban: '封禁用户'
+  };
+  return map[action] || action || '处理';
+}
+
+function subjectNameForLog(state, log) {
+  if (!log) {
+    return '';
+  }
+  if (log.subjectType === 'profile') {
+    const profile = state.profiles.find((item) => item.id === log.subjectId || item.userId === log.subjectId);
+    return profile ? profile.nickname : log.subjectId;
+  }
+  if (log.subjectType === 'report') {
+    const report = state.reports.find((item) => item.id === log.subjectId);
+    return report ? report.category : log.subjectId;
+  }
+  if (log.subjectType === 'user') {
+    const user = state.users.find((item) => item.id === log.subjectId);
+    return user ? user.nickname : log.subjectId;
+  }
+  return log.subjectId || '';
+}
+
+function getAdminReviewLogs() {
+  const state = ensureState();
+  if (!canAdminOperate(state)) {
+    return { ok: false, message: '没有管理员权限' };
+  }
+  const data = (state.reviewLogs || [])
+    .map((item) => {
+      const reviewer = state.users.find((user) => user.id === item.reviewerId);
+      return Object.assign({}, clone(item), {
+        actionText: reviewActionText(item.action),
+        subjectName: subjectNameForLog(state, item),
+        reviewerName: reviewer ? reviewer.nickname : item.reviewerId,
+        timeText: formatChatTime(item.createdAt)
+      });
+    })
+    .sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+  return { ok: true, data };
+}
+
 function resolveReport(reportId, payload) {
   const state = ensureState();
   if (!canAdminOperate(state)) {
@@ -1646,6 +1695,7 @@ module.exports = {
   getAdminPendingProfiles,
   reviewProfile,
   getAdminReports,
+  getAdminReviewLogs,
   resolveReport,
   listUsers,
   banUser

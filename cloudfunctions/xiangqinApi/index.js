@@ -1465,6 +1465,38 @@ async function reviewProfile(event, wxContext) {
   return { ok: true, message: '已处理', action: 'reviewProfile', data: nextProfile };
 }
 
+async function getAdminReviewLogs(event, wxContext) {
+  if (!(await canAdminOperate(wxContext))) {
+    return { ok: false, message: '没有管理员权限' };
+  }
+  const result = await db.collection('reviewLogs').limit(100).get();
+  const logs = result.data || [];
+  const data = [];
+  for (let i = 0; i < logs.length; i += 1) {
+    const log = logs[i];
+    let subjectName = log.subjectId || '';
+    if (log.subjectType === 'profile') {
+      const profile = await getDoc('profiles', log.subjectId);
+      subjectName = profile ? profile.nickname || profile.id : log.subjectId;
+    } else if (log.subjectType === 'report') {
+      const report = await getDoc('reports', log.subjectId);
+      subjectName = report ? report.category || report.id : log.subjectId;
+    } else if (log.subjectType === 'user') {
+      const user = await getDoc('users', log.subjectId);
+      subjectName = user ? user.nickname || user.id : log.subjectId;
+    }
+    const reviewer = await getDoc('users', log.reviewerId);
+    data.push(
+      Object.assign({}, log, {
+        subjectName,
+        reviewerName: reviewer ? reviewer.nickname || reviewer.id : log.reviewerId
+      })
+    );
+  }
+  data.sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+  return { ok: true, action: 'getAdminReviewLogs', data };
+}
+
 async function getAdminReports(event, wxContext) {
   if (!(await canAdminOperate(wxContext))) {
     return { ok: false, message: '没有管理员权限' };
@@ -1661,6 +1693,9 @@ exports.main = async (event = {}) => {
     }
     if (action === 'getAdminReports') {
       return await getAdminReports(event, wxContext);
+    }
+    if (action === 'getAdminReviewLogs') {
+      return await getAdminReviewLogs(event, wxContext);
     }
     if (action === 'resolveReport') {
       return await resolveReport(event, wxContext);

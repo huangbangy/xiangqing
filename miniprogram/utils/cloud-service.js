@@ -454,6 +454,10 @@ function getAdminReports() {
   return callApi('getAdminReports', {});
 }
 
+function getAdminReviewLogs() {
+  return callApi('getAdminReviewLogs', {});
+}
+
 function resolveReport(reportId, payload) {
   return callApi('resolveReport', {
     reportId,
@@ -498,6 +502,7 @@ module.exports = {
   getAdminPendingProfiles,
   reviewProfile,
   getAdminReports,
+  getAdminReviewLogs,
   resolveReport,
   listUsers,
   banUser,

@@ -53,3 +53,20 @@
 .admin-actions .btn {
   flex: 1;
 }
+
+.log-card {
+  border-left: 6rpx solid #b83a2f;
+}
+
+.log-remark {
+  margin-top: 16rpx;
+  padding: 14rpx 16rpx;
+  border-radius: 8rpx;
+  background: #f9f1ed;
+  color: #51443f;
+  line-height: 1.5;
+}
+
+.log-meta {
+  margin-top: 12rpx;
+}

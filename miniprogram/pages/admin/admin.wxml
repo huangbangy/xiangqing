@@ -81,7 +81,7 @@
       </view>
     </view>
 
-    <view wx:else>
+    <view wx:elif="{{tab === 'users'}}">
       <view wx:if="{{!users.length}}" class="card empty">暂无用户</view>
       <view wx:for="{{users}}" wx:key="id" class="card admin-card">
         <view class="row-between">
@@ -96,6 +96,21 @@
           </view>
           <button wx:if="{{item.status !== 'banned' && !item.isCurrent && item.role !== 'admin'}}" class="btn btn-danger btn-small" catchtap="banUser" data-userid="{{item.id}}">封禁</button>
         </view>
+      </view>
+    </view>
+
+    <view wx:else>
+      <view wx:if="{{!logs.length}}" class="card empty">暂无审核日志</view>
+      <view wx:for="{{logs}}" wx:key="id" class="card admin-card log-card">
+        <view class="row-between">
+          <view>
+            <view class="admin-name">{{item.actionText}}</view>
+            <view class="subtle">{{item.subjectName || item.subjectId}} · {{item.subjectType}}</view>
+          </view>
+          <text class="chip">{{item.timeText || '刚刚'}}</text>
+        </view>
+        <view class="log-remark">{{item.remark || '无备注'}}</view>
+        <view class="subtle log-meta">操作人：{{item.reviewerName || item.reviewerId}}</view>
       </view>
     </view>
   </block>

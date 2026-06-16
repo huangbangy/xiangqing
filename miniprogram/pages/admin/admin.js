@@ -5,6 +5,41 @@ const approveRemark = '资料真实完整，审核通过';
 const rejectReasons = ['资料信息太少', '照片不清楚或不合适', '联系方式异常', '疑似未获本人授权', '内容含广告或引流'];
 const hideReasons = ['资料内容需重新核验', '收到举报需先下架', '疑似虚假资料', '存在安全风险'];
 
+function actionText(action) {
+  const map = {
+    approve: '通过资料',
+    reject: '驳回资料',
+    hide: '下架资料',
+    resolve: '处理举报',
+    ban: '封禁用户'
+  };
+  return map[action] || action || '处理';
+}
+
+function padTime(value) {
+  return value < 10 ? `0${value}` : String(value);
+}
+
+function formatTime(value) {
+  if (!value) {
+    return '';
+  }
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+  return `${date.getMonth() + 1}/${date.getDate()} ${padTime(date.getHours())}:${padTime(date.getMinutes())}`;
+}
+
+function normalizeLogs(logs) {
+  return (logs || []).map((item) =>
+    Object.assign({}, item, {
+      actionText: item.actionText || actionText(item.action),
+      timeText: item.timeText || formatTime(item.createdAt)
+    })
+  );
+}
+
 Page({
   data: {
     error: '',
@@ -12,7 +47,8 @@ Page({
     tabs: [
       { label: '待审核', value: 'pending' },
       { label: '举报', value: 'reports' },
-      { label: '用户', value: 'users' }
+      { label: '用户', value: 'users' },
+      { label: '日志', value: 'logs' }
     ],
     summary: {
       pendingProfiles: 0,
@@ -22,7 +58,8 @@ Page({
     },
     pendingProfiles: [],
     reports: [],
-    users: []
+    users: [],
+    logs: []
   },
 
   onShow() {
@@ -108,6 +145,22 @@ Page({
           });
         return;
       }
+      if (this.data.tab === 'logs') {
+        cloudService
+          .getAdminReviewLogs()
+          .then((result) => {
+            this.setData({
+              logs: normalizeLogs(result.data || [])
+            });
+          })
+          .catch((err) => {
+            wx.showToast({
+              title: err.message || '加载失败',
+              icon: 'none'
+            });
+          });
+        return;
+      }
       cloudService
         .listUsers()
         .then((result) => {
@@ -134,6 +187,13 @@ Page({
       const result = service.getAdminReports();
       this.setData({
         reports: result.ok ? result.data : []
+      });
+      return;
+    }
+    if (this.data.tab === 'logs') {
+      const result = service.getAdminReviewLogs();
+      this.setData({
+        logs: result.ok ? normalizeLogs(result.data) : []
       });
       return;
     }
