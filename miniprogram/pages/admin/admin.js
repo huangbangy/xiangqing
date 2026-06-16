@@ -1,6 +1,10 @@
 const service = require('../../utils/service');
 const cloudService = require('../../utils/cloud-service');
 
+const approveRemark = '资料真实完整，审核通过';
+const rejectReasons = ['资料信息太少', '照片不清楚或不合适', '联系方式异常', '疑似未获本人授权', '内容含广告或引流'];
+const hideReasons = ['资料内容需重新核验', '收到举报需先下架', '疑似虚假资料', '存在安全风险'];
+
 Page({
   data: {
     error: '',
@@ -139,12 +143,10 @@ Page({
     });
   },
 
-  reviewProfile(event) {
-    const profileId = event.currentTarget.dataset.id;
-    const action = event.currentTarget.dataset.action;
+  doReviewProfile(profileId, action, remark) {
     if (cloudService.isReady()) {
       cloudService
-        .reviewProfile(profileId, action, `管理员${action}`)
+        .reviewProfile(profileId, action, remark)
         .then((result) => {
           wx.showToast({
             title: result.message,
@@ -160,12 +162,56 @@ Page({
         });
       return;
     }
-    const result = service.reviewProfile(profileId, action, `管理员${action}`);
+    const result = service.reviewProfile(profileId, action, remark);
     wx.showToast({
       title: result.message,
       icon: result.ok ? 'success' : 'none'
     });
     this.loadAdmin();
+  },
+
+  confirmApprove(profileId) {
+    wx.showModal({
+      title: '确认通过资料',
+      content: '请确认该资料真实、成年人、照片合适、无广告和违规内容。',
+      confirmText: '通过',
+      success: (res) => {
+        if (res.confirm) {
+          this.doReviewProfile(profileId, 'approve', approveRemark);
+        }
+      }
+    });
+  },
+
+  chooseReviewReason(profileId, action) {
+    const reasons = action === 'hide' ? hideReasons : rejectReasons;
+    wx.showActionSheet({
+      itemList: reasons,
+      success: (res) => {
+        const reason = reasons[res.tapIndex] || '管理员处理';
+        const actionText = action === 'hide' ? '下架' : '驳回';
+        wx.showModal({
+          title: `确认${actionText}资料`,
+          content: `原因：${reason}`,
+          confirmText: actionText,
+          success: (modalRes) => {
+            if (modalRes.confirm) {
+              this.doReviewProfile(profileId, action, `${actionText}：${reason}`);
+            }
+          }
+        });
+      }
+    });
+  },
+
+  reviewProfile(event) {
+    const profileId = event.currentTarget.dataset.id;
+    const action = event.currentTarget.dataset.action;
+    if (action === 'approve') {
+      this.confirmApprove(profileId);
+      return;
+    }
+    this.chooseReviewReason(profileId, action);
   },
 
   resolveReport(event) {

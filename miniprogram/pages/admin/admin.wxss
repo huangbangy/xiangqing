@@ -38,6 +38,13 @@
   line-height: 1.55;
 }
 
+.admin-hint {
+  margin-top: 12rpx;
+  color: #7c5a16;
+  font-size: 22rpx;
+  line-height: 1.45;
+}
+
 .admin-actions {
   gap: 12rpx;
   margin-top: 22rpx;

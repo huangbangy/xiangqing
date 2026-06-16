@@ -51,6 +51,7 @@
             <view class="admin-name">{{item.nickname}}</view>
             <view class="subtle">{{item.gender}} · {{item.age}}岁 · {{item.currentCity}} · {{item.occupation}}</view>
             <view class="admin-copy">{{item.bio}}</view>
+            <view class="admin-hint">驳回或下架时会记录处理原因。</view>
           </view>
         </view>
         <view class="row-between admin-actions">
