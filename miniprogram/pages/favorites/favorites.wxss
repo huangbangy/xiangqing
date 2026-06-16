@@ -5,18 +5,25 @@
 
 .favorite-name {
   font-size: 32rpx;
-  font-weight: 600;
-  color: #0f172a;
+  font-weight: 700;
+  color: #2b2522;
   margin-bottom: 6rpx;
 }
 
 .favorite-bio {
   margin-top: 14rpx;
-  color: #334155;
+  padding: 16rpx 18rpx;
+  border-radius: 16rpx;
+  background: rgba(126, 156, 134, 0.09);
+  color: #4d443f;
   line-height: 1.55;
 }
 
 .favorite-actions {
+  gap: 14rpx;
   margin-top: 20rpx;
 }
 
+.favorite-actions .btn {
+  flex: 1;
+}

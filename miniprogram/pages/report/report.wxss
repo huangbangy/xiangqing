@@ -1,7 +1,7 @@
 .report-name {
   font-size: 32rpx;
-  font-weight: 600;
-  color: #7f1d1d;
+  font-weight: 700;
+  color: #8b3f34;
   margin-bottom: 6rpx;
 }
 
@@ -14,19 +14,20 @@
 
 .upload-bar {
   margin-top: 16rpx;
-  padding: 14rpx 18rpx;
-  border-radius: 8rpx;
-  background: #fff1f2;
-  color: #b5362b;
+  padding: 16rpx 18rpx;
+  border-radius: 16rpx;
+  background: rgba(217, 91, 79, 0.1);
+  color: #9e4238;
   font-size: 24rpx;
 }
 
 .evidence-item {
   position: relative;
   aspect-ratio: 1 / 1;
-  border-radius: 8rpx;
+  border-radius: 16rpx;
   overflow: hidden;
-  background: #fff1f2;
+  background: rgba(217, 91, 79, 0.08);
+  border: 1rpx solid rgba(139, 63, 52, 0.08);
 }
 
 .evidence-item image {
@@ -39,10 +40,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 44rpx;
-  line-height: 44rpx;
+  height: 46rpx;
+  line-height: 46rpx;
   border-radius: 0;
-  background: rgba(185, 28, 28, 0.78);
+  background: rgba(139, 63, 52, 0.86);
   color: #ffffff;
   font-size: 22rpx;
 }

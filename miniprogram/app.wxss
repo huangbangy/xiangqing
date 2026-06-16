@@ -1,6 +1,10 @@
 page {
-  background-color: #f8f3ef;
-  color: #1f2937;
+  min-height: 100vh;
+  background-color: #fff8f3;
+  background-image:
+    linear-gradient(180deg, #fff8f3 0%, #f6faf4 42%, #fbf1ec 100%);
+  color: #2b2522;
+  font-family: "PingFang SC", "Source Han Sans SC", sans-serif;
   font-size: 28rpx;
 }
 
@@ -8,11 +12,15 @@ button::after {
   border: none;
 }
 
+button {
+  font-family: "PingFang SC", "Source Han Sans SC", sans-serif;
+}
+
 .page {
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 24rpx;
-  background-color: #f8f3ef;
+  padding: 28rpx 24rpx 42rpx;
+  background-color: transparent;
 }
 
 .section {
@@ -20,32 +28,40 @@ button::after {
 }
 
 .card {
-  background: #fffdfb;
-  border: 1rpx solid rgba(145, 65, 54, 0.1);
-  border-radius: 8rpx;
-  padding: 24rpx;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 253, 249, 0.9);
+  border: 1rpx solid rgba(139, 63, 52, 0.12);
+  border-radius: 16rpx;
+  padding: 28rpx;
   box-sizing: border-box;
-  box-shadow: 0 12rpx 32rpx rgba(72, 42, 36, 0.07);
+  box-shadow: 0 18rpx 48rpx rgba(80, 52, 46, 0.1);
+  -webkit-backdrop-filter: blur(18rpx);
+  backdrop-filter: blur(18rpx);
 }
 
 .card + .card {
-  margin-top: 16rpx;
+  margin-top: 18rpx;
 }
 
 .section-title {
-  font-size: 30rpx;
-  font-weight: 600;
-  color: #33211d;
+  font-family: "Songti SC", "Noto Serif SC", serif;
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #2b2522;
+  letter-spacing: 0;
+  line-height: 1.25;
   margin-bottom: 16rpx;
 }
 
 .subtle {
-  color: #746862;
+  color: #766b63;
   font-size: 24rpx;
+  line-height: 1.55;
 }
 
 .muted {
-  color: #9a8f88;
+  color: #a0968e;
 }
 
 .row {
@@ -90,38 +106,48 @@ button::after {
 
 .divider {
   height: 1rpx;
-  background: rgba(145, 65, 54, 0.12);
-  margin: 20rpx 0;
+  background: rgba(139, 63, 52, 0.12);
+  margin: 22rpx 0;
 }
 
 .btn {
-  border-radius: 8rpx;
-  padding: 0 24rpx;
+  min-width: 0;
+  border-radius: 999rpx;
+  padding: 0 28rpx;
   font-size: 28rpx;
-  line-height: 72rpx;
-  height: 72rpx;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 76rpx;
+  height: 76rpx;
   box-sizing: border-box;
+  transition: transform 160ms ease, opacity 160ms ease;
 }
 
 .btn-primary {
-  background: #b83a2f;
+  background: linear-gradient(135deg, #d95b4f 0%, #b8493e 100%);
   color: #ffffff;
+  box-shadow:
+    0 16rpx 34rpx rgba(217, 91, 79, 0.28),
+    inset 0 1rpx 0 rgba(255, 255, 255, 0.35);
 }
 
 .btn-ghost {
-  background: #f4e8e3;
-  color: #6f332c;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(139, 63, 52, 0.14);
+  color: #8b3f34;
+  box-shadow: inset 0 1rpx 0 rgba(255, 255, 255, 0.78);
 }
 
 .btn-danger {
-  background: #f9e7e3;
-  color: #a53128;
+  background: #fae7e2;
+  color: #a73930;
+  border: 1rpx solid rgba(167, 57, 48, 0.16);
 }
 
 .btn-small {
-  height: 56rpx;
-  line-height: 56rpx;
-  padding: 0 20rpx;
+  height: 58rpx;
+  line-height: 58rpx;
+  padding: 0 22rpx;
   font-size: 24rpx;
 }
 
@@ -129,20 +155,23 @@ button::after {
 .textarea {
   width: 100%;
   box-sizing: border-box;
-  border: 1rpx solid rgba(145, 65, 54, 0.16);
-  border-radius: 8rpx;
-  background: #fffdfb;
-  padding: 18rpx 20rpx;
+  border: 1rpx solid rgba(139, 63, 52, 0.15);
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.78);
+  color: #2b2522;
+  padding: 20rpx 22rpx;
   font-size: 28rpx;
+  box-shadow: inset 0 2rpx 6rpx rgba(80, 52, 46, 0.04);
 }
 
 .textarea {
-  min-height: 180rpx;
+  min-height: 188rpx;
+  line-height: 1.55;
 }
 
 .label {
-  font-size: 24rpx;
-  color: #6a5d56;
+  font-size: 23rpx;
+  color: #8c7d72;
   margin-bottom: 10rpx;
 }
 
@@ -150,41 +179,44 @@ button::after {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16rpx;
+  padding: 0 18rpx;
   height: 48rpx;
   line-height: 48rpx;
-  border-radius: 24rpx;
-  background: #f4e8e3;
-  color: #6f332c;
+  border-radius: 999rpx;
+  background: rgba(126, 156, 134, 0.13);
+  color: #496c52;
   font-size: 22rpx;
+  font-weight: 600;
 }
 
 .chip-active {
-  background: #b83a2f;
-  color: #ffffff;
+  background: #2b2522;
+  color: #fff8f3;
 }
 
 .tag {
   display: inline-flex;
   align-items: center;
-  padding: 0 14rpx;
+  padding: 0 16rpx;
   height: 42rpx;
   line-height: 42rpx;
-  border-radius: 21rpx;
-  background: #f5ebe6;
-  color: #6f332c;
+  border-radius: 999rpx;
+  background: rgba(126, 156, 134, 0.12);
+  color: #4c6f55;
   font-size: 22rpx;
+  font-weight: 500;
 }
 
 .tag-soft {
-  background: #f9e7e3;
-  color: #a53128;
+  background: rgba(217, 91, 79, 0.1);
+  color: #9e4238;
 }
 
 .empty {
-  padding: 64rpx 24rpx;
+  padding: 68rpx 28rpx;
   text-align: center;
-  color: #94a3b8;
+  color: #8d8178;
+  line-height: 1.65;
 }
 
 .avatar {
@@ -193,19 +225,20 @@ button::after {
   height: 96rpx;
   border-radius: 50%;
   overflow: hidden;
-  background: #f4e8e3;
+  background: linear-gradient(135deg, #f2d8a7 0%, #d95b4f 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #7c382f;
+  color: #fff8f3;
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
+  box-shadow: 0 14rpx 30rpx rgba(139, 63, 52, 0.18);
 }
 
 .avatar-lg {
-  width: 120rpx;
-  height: 120rpx;
-  font-size: 36rpx;
+  width: 124rpx;
+  height: 124rpx;
+  font-size: 38rpx;
 }
 
 .avatar-img {
@@ -214,28 +247,31 @@ button::after {
 }
 
 .safe-bottom {
-  padding-bottom: env(safe-area-inset-bottom);
+  padding-bottom: calc(42rpx + env(safe-area-inset-bottom));
 }
 
 .segmented {
   display: flex;
-  background: #efe1db;
-  border-radius: 8rpx;
+  padding: 6rpx;
+  background: rgba(255, 255, 255, 0.62);
+  border: 1rpx solid rgba(139, 63, 52, 0.12);
+  border-radius: 16rpx;
   overflow: hidden;
 }
 
 .segmented-item {
   flex: 1;
   text-align: center;
-  padding: 18rpx 12rpx;
+  padding: 16rpx 12rpx;
+  border-radius: 12rpx;
   font-size: 26rpx;
-  color: #6f332c;
-  background: #efe1db;
+  color: #8b3f34;
+  background: transparent;
 }
 
 .segmented-item-active {
-  background: #b83a2f;
-  color: #ffffff;
+  background: #2b2522;
+  color: #fff8f3;
 }
 
 .progress-track {
@@ -243,13 +279,13 @@ button::after {
   height: 14rpx;
   border-radius: 999rpx;
   overflow: hidden;
-  background: #eadbd5;
+  background: rgba(139, 63, 52, 0.12);
 }
 
 .progress-fill {
   height: 100%;
   border-radius: 999rpx;
-  background: #b83a2f;
+  background: linear-gradient(90deg, #7e9c86 0%, #d95b4f 100%);
 }
 
 .form-grid {

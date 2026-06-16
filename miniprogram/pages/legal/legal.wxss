@@ -2,29 +2,33 @@
   display: flex;
   align-items: center;
   gap: 20rpx;
+  background:
+    linear-gradient(135deg, rgba(43, 37, 34, 0.96) 0%, rgba(139, 63, 52, 0.94) 100%);
+  color: #fff8f3;
 }
 
 .legal-mark {
   width: 92rpx;
   height: 92rpx;
   line-height: 92rpx;
-  border-radius: 8rpx;
-  background: #fff1f2;
-  color: #c63d2f;
+  border-radius: 16rpx;
+  background: rgba(255, 248, 243, 0.14);
+  color: #f2d8a7;
   text-align: center;
-  font-family: KaiTi, STKaiti, serif;
+  font-family: "Songti SC", "Noto Serif SC", serif;
   font-size: 54rpx;
 }
 
 .legal-title {
+  font-family: "Songti SC", "Noto Serif SC", serif;
   font-size: 40rpx;
   font-weight: 700;
-  color: #7f1d1d;
+  color: #fff8f3;
   margin-bottom: 8rpx;
 }
 
 .legal-intro {
-  color: #475569;
+  color: rgba(255, 248, 243, 0.76);
   line-height: 1.7;
   font-size: 28rpx;
 }
@@ -35,8 +39,8 @@
 
 .legal-line {
   position: relative;
-  padding-left: 22rpx;
-  color: #475569;
+  padding-left: 24rpx;
+  color: #4d443f;
   font-size: 26rpx;
 }
 
@@ -48,9 +52,9 @@
   content: "";
   position: absolute;
   left: 0;
-  top: 19rpx;
+  top: 20rpx;
   width: 8rpx;
   height: 8rpx;
   border-radius: 50%;
-  background: #c63d2f;
+  background: #d95b4f;
 }

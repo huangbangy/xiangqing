@@ -5,19 +5,19 @@
 
 .choose-btn {
   margin-top: 16rpx;
-  width: 200rpx;
+  width: 220rpx;
 }
 
 .upload-bar {
-  padding: 14rpx 18rpx;
-  border-radius: 8rpx;
-  background: #fff1f2;
-  color: #b5362b;
+  padding: 16rpx 18rpx;
+  border-radius: 16rpx;
+  background: rgba(217, 91, 79, 0.1);
+  color: #9e4238;
   font-size: 24rpx;
 }
 
 .photo-empty {
-  padding: 28rpx;
+  padding: 30rpx;
 }
 
 .contact-note {
@@ -25,7 +25,7 @@
 }
 
 .short-textarea {
-  min-height: 130rpx;
+  min-height: 132rpx;
 }
 
 .tag-picker {
@@ -35,18 +35,19 @@
 }
 
 .tag-toggle {
-  height: 52rpx;
-  line-height: 52rpx;
+  height: 54rpx;
+  line-height: 54rpx;
   padding: 0 18rpx;
-  border-radius: 26rpx;
-  background: #fff7f7;
-  color: #7f1d1d;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(139, 63, 52, 0.1);
+  color: #72564d;
   font-size: 24rpx;
 }
 
 .tag-toggle-active {
-  background: #ffe4e6;
-  color: #b5362b;
+  background: #2b2522;
+  color: #fff8f3;
 }
 
 .tag-hint {
@@ -55,7 +56,7 @@
 
 .match-question + .match-question {
   padding-top: 16rpx;
-  border-top: 1rpx solid #f8d7da;
+  border-top: 1rpx solid rgba(139, 63, 52, 0.1);
 }
 
 .match-options {
@@ -65,18 +66,21 @@
 }
 
 .match-option {
-  height: 52rpx;
-  line-height: 52rpx;
+  height: 54rpx;
+  line-height: 54rpx;
   padding: 0 18rpx;
-  border-radius: 26rpx;
-  background: #fff7f7;
-  color: #7f1d1d;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1rpx solid rgba(139, 63, 52, 0.1);
+  color: #72564d;
   font-size: 24rpx;
 }
 
 .match-option-active {
-  background: #c63d2f;
+  background: #d95b4f;
   color: #ffffff;
+  border-color: #d95b4f;
+  box-shadow: 0 12rpx 28rpx rgba(217, 91, 79, 0.22);
 }
 
 .photo-grid {
@@ -89,8 +93,9 @@
   position: relative;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: 8rpx;
-  background: #fff1f2;
+  border-radius: 16rpx;
+  background: rgba(126, 156, 134, 0.1);
+  border: 1rpx solid rgba(139, 63, 52, 0.08);
 }
 
 .photo-item image {
@@ -103,10 +108,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  height: 44rpx;
-  line-height: 44rpx;
+  height: 46rpx;
+  line-height: 46rpx;
   border-radius: 0;
-  background: rgba(185, 28, 28, 0.78);
+  background: rgba(139, 63, 52, 0.86);
   color: #ffffff;
   font-size: 22rpx;
 }
@@ -122,7 +127,7 @@
   display: flex;
   align-items: center;
   gap: 8rpx;
-  color: #475569;
+  color: #4d443f;
   font-size: 24rpx;
 }
 
@@ -139,13 +144,14 @@
   line-height: 1.4;
   padding: 0;
   background: transparent;
-  color: #b5362b;
+  color: #9e4238;
   font-size: 24rpx;
 }
 
 .bottom-actions {
   position: sticky;
   bottom: 24rpx;
+  padding-top: 10rpx;
 }
 
 .bottom-actions .btn {

@@ -1,9 +1,10 @@
 .messages-head {
   align-items: flex-start;
+  padding: 8rpx 2rpx 0;
 }
 
 .message-card {
-  background: #fffafa;
+  background: rgba(255, 255, 255, 0.74);
 }
 
 .message-main {
@@ -24,7 +25,7 @@
 .message-name {
   font-size: 32rpx;
   font-weight: 700;
-  color: #0f172a;
+  color: #2b2522;
   margin-bottom: 6rpx;
 }
 
@@ -38,7 +39,7 @@
 
 .message-time {
   font-size: 22rpx;
-  color: #94a3b8;
+  color: #a0968e;
 }
 
 .unread-dot {
@@ -47,16 +48,21 @@
   line-height: 34rpx;
   padding: 0 8rpx;
   box-sizing: border-box;
-  border-radius: 17rpx;
-  background: #c63d2f;
+  border-radius: 999rpx;
+  background: #d95b4f;
   color: #ffffff;
   font-size: 20rpx;
+  font-weight: 700;
   text-align: center;
+  box-shadow: 0 8rpx 18rpx rgba(217, 91, 79, 0.24);
 }
 
 .message-last {
   margin-top: 14rpx;
-  color: #334155;
+  padding: 16rpx 18rpx;
+  border-radius: 16rpx;
+  background: rgba(126, 156, 134, 0.09);
+  color: #4d443f;
   line-height: 1.55;
 }
 
@@ -68,8 +74,8 @@
 }
 
 .tag-warm {
-  background: #fff7ed;
-  color: #c2410c;
+  background: rgba(242, 216, 167, 0.3);
+  color: #73591f;
 }
 
 .message-actions {

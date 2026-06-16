@@ -16,14 +16,14 @@
   ],
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#c63d2f",
-    "navigationBarTextStyle": "white",
+    "navigationBarBackgroundColor": "#fff8f3",
+    "navigationBarTextStyle": "black",
     "navigationBarTitleText": "新化相亲"
   },
   "tabBar": {
-    "color": "#64748b",
-    "selectedColor": "#c63d2f",
-    "backgroundColor": "#ffffff",
+    "color": "#8c7d72",
+    "selectedColor": "#d95b4f",
+    "backgroundColor": "#fffdf9",
     "borderStyle": "white",
     "list": [
       {

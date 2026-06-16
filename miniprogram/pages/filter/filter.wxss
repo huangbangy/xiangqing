@@ -2,3 +2,7 @@
   flex: 1;
 }
 
+.filter-page .card,
+.page .segmented {
+  box-shadow: 0 12rpx 32rpx rgba(80, 52, 46, 0.08);
+}
