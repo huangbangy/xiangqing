@@ -40,6 +40,38 @@
   </view>
 
   <view class="section card">
+    <view class="section-title">提审材料</view>
+    <view class="subtle section-subtitle">这些内容需要在微信公众平台或提审说明里准备好。</view>
+    <view class="guide-list">
+      <view wx:for="{{submissionItems}}" wx:key="title" class="guide-item">
+        <view class="guide-title">{{item.title}}</view>
+        <view class="guide-text">{{item.text}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">提审截图</view>
+    <view class="screenshot-grid">
+      <view wx:for="{{screenshotItems}}" wx:key="*this" class="screenshot-item">
+        <view class="screenshot-index">{{index + 1}}</view>
+        <view>{{item}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card">
+    <view class="section-title">真机测试流程</view>
+    <view class="subtle section-subtitle">用开发者工具“预览”扫码，在手机上按顺序跑完。</view>
+    <view class="guide-list">
+      <view wx:for="{{deviceTestItems}}" wx:key="title" class="guide-item">
+        <view class="guide-title">{{item.title}}</view>
+        <view class="guide-text">{{item.text}}</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="section card">
     <view class="row-between guide-head">
       <view>
         <view class="section-title">管理员说明</view>

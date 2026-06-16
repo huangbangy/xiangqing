@@ -40,6 +40,12 @@
   gap: 14rpx;
 }
 
+.section-subtitle {
+  margin-top: -4rpx;
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
 .check-card {
   padding: 18rpx;
   border-radius: 8rpx;
@@ -133,6 +139,34 @@
   color: #51443f;
   line-height: 1.6;
   font-size: 24rpx;
+}
+
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12rpx;
+}
+
+.screenshot-item {
+  display: grid;
+  grid-template-columns: 48rpx 1fr;
+  align-items: flex-start;
+  gap: 14rpx;
+  padding: 16rpx;
+  border-radius: 8rpx;
+  background: #f9f1ed;
+  color: #51443f;
+  line-height: 1.5;
+}
+
+.screenshot-index {
+  height: 42rpx;
+  line-height: 42rpx;
+  border-radius: 21rpx;
+  text-align: center;
+  background: #b83a2f;
+  color: #ffffff;
+  font-size: 22rpx;
 }
 
 .rule-row {
