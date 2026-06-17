@@ -21,6 +21,7 @@ Page({
       missingText: '',
       hintText: ''
     },
+    reviewFeedback: null,
     mode: 'self',
     modeOptions: [
       {
@@ -67,6 +68,7 @@ Page({
       profile,
       recentViews,
       statusText: format.formatStatus(profile.reviewStatus),
+      reviewFeedback: this.buildReviewFeedback(profile),
       mode,
       profileCompletion: Object.assign({}, completion, {
         missingText,
@@ -98,6 +100,7 @@ Page({
           this.setData({
             profile: cloudProfile,
             statusText: format.formatStatus(cloudProfile.reviewStatus),
+            reviewFeedback: this.buildReviewFeedback(cloudProfile),
             profileCompletion: Object.assign({}, cloudCompletion, {
               missingText: cloudMissingText,
               hintText: cloudCompletion.missing.length ? `还差：${cloudMissingText}` : cloudMissingText
@@ -114,6 +117,35 @@ Page({
           console.warn('cloud me failed, keep mock data', err);
         });
     }
+  },
+
+  buildReviewFeedback(profile) {
+    const current = profile || {};
+    if (current.reviewStatus === 'rejected') {
+      return {
+        title: '资料未通过审核',
+        text: current.reviewRemark || '资料暂未通过，请根据审核要求修改后重新提交。',
+        tone: 'warn',
+        actionText: '修改后重新提交'
+      };
+    }
+    if (current.reviewStatus === 'hidden') {
+      return {
+        title: '资料已下架',
+        text: current.reviewRemark || '资料已下架，请修改后重新提交审核。',
+        tone: 'danger',
+        actionText: '修改资料'
+      };
+    }
+    if (current.reviewStatus === 'pending') {
+      return {
+        title: '资料审核中',
+        text: '管理员会先确认资料真实性和内容安全，审核通过后才会公开展示。',
+        tone: 'info',
+        actionText: ''
+      };
+    }
+    return null;
   },
 
   switchMode(event) {

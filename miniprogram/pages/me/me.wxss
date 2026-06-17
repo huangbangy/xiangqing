@@ -94,6 +94,30 @@
   line-height: 1.45;
 }
 
+.review-feedback {
+  border-left: 6rpx solid #d95b4f;
+}
+
+.review-feedback-info {
+  border-left-color: #7c5a16;
+}
+
+.review-feedback-warn,
+.review-feedback-danger {
+  border-left-color: #d95b4f;
+}
+
+.review-feedback-head {
+  align-items: flex-start;
+  gap: 16rpx;
+}
+
+.review-feedback-text {
+  color: #4d443f;
+  line-height: 1.55;
+  font-size: 24rpx;
+}
+
 .action-list {
   padding: 0;
   overflow: hidden;

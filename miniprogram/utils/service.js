@@ -997,8 +997,10 @@ function saveMyProfile(payload) {
   if (profile.reviewStatus === 'approved') {
     profile.reviewStatus = 'draft';
     profile.isPublic = false;
+    profile.reviewRemark = '';
   } else if (!profile.reviewStatus || profile.reviewStatus === 'rejected') {
     profile.reviewStatus = 'draft';
+    profile.reviewRemark = '';
   }
   saveState(state);
   return clone(profile);
@@ -1026,6 +1028,7 @@ function submitMyProfile() {
   }
   profile.reviewStatus = 'pending';
   profile.isPublic = false;
+  profile.reviewRemark = '';
   profile.submittedAt = now();
   profile.updatedAt = now();
   state.reviewLogs.unshift({
@@ -1473,14 +1476,17 @@ function reviewProfile(profileId, action, remark) {
   if (action === 'approve') {
     profile.reviewStatus = 'approved';
     profile.isPublic = true;
+    profile.reviewRemark = '';
     profile.reviewedAt = now();
   } else if (action === 'reject') {
     profile.reviewStatus = 'rejected';
     profile.isPublic = false;
+    profile.reviewRemark = remark || '资料未通过审核，请修改后重新提交。';
     profile.reviewedAt = now();
   } else if (action === 'hide') {
     profile.reviewStatus = 'hidden';
     profile.isPublic = false;
+    profile.reviewRemark = remark || '资料已下架，请修改后重新提交。';
     profile.reviewedAt = now();
   }
   profile.updatedAt = now();

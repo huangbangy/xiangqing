@@ -911,9 +911,11 @@ async function saveMyProfile(event, wxContext) {
   if (profile.reviewStatus === 'approved') {
     profile.reviewStatus = 'draft';
     profile.isPublic = false;
+    profile.reviewRemark = '';
   } else if (!profile.reviewStatus || profile.reviewStatus === 'rejected') {
     profile.reviewStatus = 'draft';
     profile.isPublic = false;
+    profile.reviewRemark = '';
   }
   await db.collection('profiles').doc(profile.id).set({
     data: profile
@@ -943,6 +945,7 @@ async function submitMyProfile(event, wxContext) {
   const nextProfile = Object.assign({}, stripDbId(profile), {
     reviewStatus: 'pending',
     isPublic: false,
+    reviewRemark: '',
     submittedAt: timestamp,
     updatedAt: timestamp
   });
@@ -1433,14 +1436,17 @@ async function reviewProfile(event, wxContext) {
   if (action === 'approve') {
     nextProfile.reviewStatus = 'approved';
     nextProfile.isPublic = true;
+    nextProfile.reviewRemark = '';
     nextProfile.reviewedAt = timestamp;
   } else if (action === 'reject') {
     nextProfile.reviewStatus = 'rejected';
     nextProfile.isPublic = false;
+    nextProfile.reviewRemark = event.remark || '资料未通过审核，请修改后重新提交。';
     nextProfile.reviewedAt = timestamp;
   } else if (action === 'hide') {
     nextProfile.reviewStatus = 'hidden';
     nextProfile.isPublic = false;
+    nextProfile.reviewRemark = event.remark || '资料已下架，请修改后重新提交。';
     nextProfile.reviewedAt = timestamp;
   } else {
     return { ok: false, message: '未知审核动作' };

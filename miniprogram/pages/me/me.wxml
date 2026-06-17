@@ -29,6 +29,16 @@
     <view class="completion-missing">{{profileCompletion.hintText}}</view>
   </view>
 
+  <view wx:if="{{reviewFeedback}}" class="section card review-feedback review-feedback-{{reviewFeedback.tone}}">
+    <view class="row-between review-feedback-head">
+      <view>
+        <view class="section-title">{{reviewFeedback.title}}</view>
+        <view class="review-feedback-text">{{reviewFeedback.text}}</view>
+      </view>
+      <button wx:if="{{reviewFeedback.actionText}}" class="btn btn-primary btn-small" bindtap="goEdit">{{reviewFeedback.actionText}}</button>
+    </view>
+  </view>
+
   <view class="section card">
     <view class="section-title">当前身份</view>
     <view class="mode-list">
