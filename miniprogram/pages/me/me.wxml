@@ -27,6 +27,12 @@
       <view class="progress-fill" style="width: {{profileCompletion.score}}%;"></view>
     </view>
     <view class="completion-missing">{{profileCompletion.hintText}}</view>
+    <view wx:if="{{profileCompletion.tips.length}}" class="quality-tips">
+      <view wx:for="{{profileCompletion.tips}}" wx:key="*this" class="quality-tip">
+        <view class="quality-dot"></view>
+        <view>{{item}}</view>
+      </view>
+    </view>
   </view>
 
   <view wx:if="{{reviewFeedback}}" class="section card review-feedback review-feedback-{{reviewFeedback.tone}}">

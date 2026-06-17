@@ -94,6 +94,33 @@
   line-height: 1.45;
 }
 
+.quality-tips {
+  display: grid;
+  gap: 10rpx;
+  margin-top: 18rpx;
+}
+
+.quality-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  padding: 14rpx 16rpx;
+  border-radius: 8rpx;
+  background: #fff4f1;
+  color: #6b2b23;
+  font-size: 23rpx;
+  line-height: 1.45;
+}
+
+.quality-dot {
+  width: 10rpx;
+  height: 10rpx;
+  margin-top: 12rpx;
+  border-radius: 999rpx;
+  background: #c63d2f;
+  flex: 0 0 auto;
+}
+
 .review-feedback {
   border-left: 6rpx solid #d95b4f;
 }

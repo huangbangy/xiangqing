@@ -1,11 +1,32 @@
 <view class="page safe-bottom">
-  <view class="section">
-    <view class="section-title">联系申请</view>
+  <view class="section card request-overview">
+    <view class="row-between">
+      <view>
+        <view class="section-title">联系申请</view>
+        <view class="subtle">先看资料和留言，再决定是否开放联系方式。</view>
+      </view>
+      <text class="chip chip-active">{{summary.total}} 条</text>
+    </view>
+    <view class="request-stats">
+      <view class="request-stat">
+        <view class="request-stat-number">{{summary.pending}}</view>
+        <view class="subtle">待处理</view>
+      </view>
+      <view class="request-stat">
+        <view class="request-stat-number">{{summary.accepted}}</view>
+        <view class="subtle">已同意</view>
+      </view>
+      <view class="request-stat">
+        <view class="request-stat-number">{{summary.rejected}}</view>
+        <view class="subtle">已拒绝</view>
+      </view>
+    </view>
     <view class="segmented">
       <view wx:for="{{tabs}}" wx:key="value" class="segmented-item {{tab === item.value ? 'segmented-item-active' : ''}}" data-tab="{{item.value}}" bindtap="switchTab">
         {{item.label}}
       </view>
     </view>
+    <view class="request-safety">同意申请前建议先查看资料。平台不会在未同意前展示联系方式。</view>
   </view>
 
   <view wx:if="{{!list.length}}" class="card empty">
@@ -29,7 +50,14 @@
             <text class="chip">{{item.statusText}}</text>
           </view>
         </view>
-        <view class="request-message">{{item.messageText}}</view>
+        <view class="request-message">
+          <view class="message-head">
+            <text>申请留言</text>
+            <text class="message-quality message-quality-{{item.messageQuality.tone}}">{{item.messageQuality.text}}</text>
+          </view>
+          <view>{{item.messageText}}</view>
+        </view>
+        <view class="request-status-hint">{{item.statusHint}}</view>
         <view wx:if="{{item.status === 'accepted' && item.displayProfile.canViewContact}}" class="request-contact">
           <block wx:if="{{item.displayProfile.contactChannel === 'parent'}}">
             <view>家长：{{item.displayProfile.parentName || '未填写'}} {{item.displayProfile.parentRelation || ''}}</view>

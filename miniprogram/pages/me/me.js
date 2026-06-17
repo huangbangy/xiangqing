@@ -19,7 +19,8 @@ Page({
       score: 0,
       missing: [],
       missingText: '',
-      hintText: ''
+      hintText: '',
+      tips: []
     },
     reviewFeedback: null,
     mode: 'self',
@@ -72,7 +73,8 @@ Page({
       mode,
       profileCompletion: Object.assign({}, completion, {
         missingText,
-        hintText
+        hintText,
+        tips: this.buildProfileTips(profile, completion)
       }),
       counts: {
         favorites: favorites.length,
@@ -103,7 +105,8 @@ Page({
             reviewFeedback: this.buildReviewFeedback(cloudProfile),
             profileCompletion: Object.assign({}, cloudCompletion, {
               missingText: cloudMissingText,
-              hintText: cloudCompletion.missing.length ? `还差：${cloudMissingText}` : cloudMissingText
+              hintText: cloudCompletion.missing.length ? `还差：${cloudMissingText}` : cloudMissingText,
+              tips: this.buildProfileTips(cloudProfile, cloudCompletion)
             }),
             counts: {
               favorites: favorites.length,
@@ -117,6 +120,27 @@ Page({
           console.warn('cloud me failed, keep mock data', err);
         });
     }
+  },
+
+  buildProfileTips(profile, completion) {
+    const current = profile || {};
+    const tips = [];
+    if (!current.avatarUrl) {
+      tips.push('上传一张清晰头像，别人更愿意认真看资料。');
+    }
+    if (!Array.isArray(current.photos) || !current.photos.length) {
+      tips.push('补充 1-3 张生活照，能明显提升可信度。');
+    }
+    if (!current.lifeRhythm || !current.relationshipView || !current.weekendPlan) {
+      tips.push('补齐“三句话认识我”，比长篇介绍更容易被记住。');
+    }
+    if (!current.matchAnswerCount && (!current.matchAnswers || !Object.keys(current.matchAnswers).length)) {
+      tips.push('回答缘分问答，系统能生成更自然的开场白。');
+    }
+    if (completion && completion.score >= 90) {
+      tips.push('资料质量已经不错，下一步可以等待审核或主动浏览合适的人。');
+    }
+    return tips.slice(0, 3);
   },
 
   buildReviewFeedback(profile) {
